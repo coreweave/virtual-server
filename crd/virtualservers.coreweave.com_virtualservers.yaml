@@ -1,0 +1,1791 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: virtualservers.virtualservers.coreweave.com
+spec:
+  group: virtualservers.coreweave.com
+  names:
+    kind: VirtualServer
+    listKind: VirtualServerList
+    plural: virtualservers
+    shortNames:
+    - vserver
+    - vs
+    singular: virtualserver
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[0].reason
+      name: status
+      type: string
+    - jsonPath: .status.conditions[0].message
+      name: reason
+      type: string
+    - jsonPath: .status.conditions[3].status
+      name: started
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: VirtualServer is the Schema for the virtualservers API. It allows
+          for configuring a Virtual Server instance on the Coreweave Cloud kubernetes
+          platform. The VirtualServer handles the creation and lifecycle of a VirtualMachine
+          and Services.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VirtualServerSpec defines the desired state of VirtualServer
+            properties:
+              affinity:
+                description: Affinity is a group of affinity scheduling rules.
+                properties:
+                  nodeAffinity:
+                    description: Describes node affinity scheduling rules for the
+                      pod.
+                    properties:
+                      preferredDuringSchedulingIgnoredDuringExecution:
+                        description: The scheduler will prefer to schedule pods to
+                          nodes that satisfy the affinity expressions specified by
+                          this field, but it may choose a node that violates one or
+                          more of the expressions. The node that is most preferred
+                          is the one with the greatest sum of weights, i.e. for each
+                          node that meets all of the scheduling requirements (resource
+                          request, requiredDuringScheduling affinity expressions,
+                          etc.), compute a sum by iterating through the elements of
+                          this field and adding "weight" to the sum if the node matches
+                          the corresponding matchExpressions; the node(s) with the
+                          highest sum are the most preferred.
+                        items:
+                          description: An empty preferred scheduling term matches
+                            all objects with implicit weight 0 (i.e. it's a no-op).
+                            A null preferred scheduling term matches no objects (i.e.
+                            is also a no-op).
+                          properties:
+                            preference:
+                              description: A node selector term, associated with the
+                                corresponding weight.
+                              properties:
+                                matchExpressions:
+                                  description: A list of node selector requirements
+                                    by node's labels.
+                                  items:
+                                    description: A node selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: The label key that the selector
+                                          applies to.
+                                        type: string
+                                      operator:
+                                        description: Represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists, DoesNotExist. Gt, and
+                                          Lt.
+                                        type: string
+                                      values:
+                                        description: An array of string values. If
+                                          the operator is In or NotIn, the values
+                                          array must be non-empty. If the operator
+                                          is Exists or DoesNotExist, the values array
+                                          must be empty. If the operator is Gt or
+                                          Lt, the values array must have a single
+                                          element, which will be interpreted as an
+                                          integer. This array is replaced during a
+                                          strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchFields:
+                                  description: A list of node selector requirements
+                                    by node's fields.
+                                  items:
+                                    description: A node selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: The label key that the selector
+                                          applies to.
+                                        type: string
+                                      operator:
+                                        description: Represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists, DoesNotExist. Gt, and
+                                          Lt.
+                                        type: string
+                                      values:
+                                        description: An array of string values. If
+                                          the operator is In or NotIn, the values
+                                          array must be non-empty. If the operator
+                                          is Exists or DoesNotExist, the values array
+                                          must be empty. If the operator is Gt or
+                                          Lt, the values array must have a single
+                                          element, which will be interpreted as an
+                                          integer. This array is replaced during a
+                                          strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                              type: object
+                            weight:
+                              description: Weight associated with matching the corresponding
+                                nodeSelectorTerm, in the range 1-100.
+                              format: int32
+                              type: integer
+                          required:
+                          - preference
+                          - weight
+                          type: object
+                        type: array
+                      requiredDuringSchedulingIgnoredDuringExecution:
+                        description: If the affinity requirements specified by this
+                          field are not met at scheduling time, the pod will not be
+                          scheduled onto the node. If the affinity requirements specified
+                          by this field cease to be met at some point during pod execution
+                          (e.g. due to an update), the system may or may not try to
+                          eventually evict the pod from its node.
+                        properties:
+                          nodeSelectorTerms:
+                            description: Required. A list of node selector terms.
+                              The terms are ORed.
+                            items:
+                              description: A null or empty node selector term matches
+                                no objects. The requirements of them are ANDed. The
+                                TopologySelectorTerm type implements a subset of the
+                                NodeSelectorTerm.
+                              properties:
+                                matchExpressions:
+                                  description: A list of node selector requirements
+                                    by node's labels.
+                                  items:
+                                    description: A node selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: The label key that the selector
+                                          applies to.
+                                        type: string
+                                      operator:
+                                        description: Represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists, DoesNotExist. Gt, and
+                                          Lt.
+                                        type: string
+                                      values:
+                                        description: An array of string values. If
+                                          the operator is In or NotIn, the values
+                                          array must be non-empty. If the operator
+                                          is Exists or DoesNotExist, the values array
+                                          must be empty. If the operator is Gt or
+                                          Lt, the values array must have a single
+                                          element, which will be interpreted as an
+                                          integer. This array is replaced during a
+                                          strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchFields:
+                                  description: A list of node selector requirements
+                                    by node's fields.
+                                  items:
+                                    description: A node selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: The label key that the selector
+                                          applies to.
+                                        type: string
+                                      operator:
+                                        description: Represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists, DoesNotExist. Gt, and
+                                          Lt.
+                                        type: string
+                                      values:
+                                        description: An array of string values. If
+                                          the operator is In or NotIn, the values
+                                          array must be non-empty. If the operator
+                                          is Exists or DoesNotExist, the values array
+                                          must be empty. If the operator is Gt or
+                                          Lt, the values array must have a single
+                                          element, which will be interpreted as an
+                                          integer. This array is replaced during a
+                                          strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                              type: object
+                            type: array
+                        required:
+                        - nodeSelectorTerms
+                        type: object
+                    type: object
+                  podAffinity:
+                    description: Describes pod affinity scheduling rules (e.g. co-locate
+                      this pod in the same node, zone, etc. as some other pod(s)).
+                    properties:
+                      preferredDuringSchedulingIgnoredDuringExecution:
+                        description: The scheduler will prefer to schedule pods to
+                          nodes that satisfy the affinity expressions specified by
+                          this field, but it may choose a node that violates one or
+                          more of the expressions. The node that is most preferred
+                          is the one with the greatest sum of weights, i.e. for each
+                          node that meets all of the scheduling requirements (resource
+                          request, requiredDuringScheduling affinity expressions,
+                          etc.), compute a sum by iterating through the elements of
+                          this field and adding "weight" to the sum if the node has
+                          pods which matches the corresponding podAffinityTerm; the
+                          node(s) with the highest sum are the most preferred.
+                        items:
+                          description: The weights of all of the matched WeightedPodAffinityTerm
+                            fields are added per-node to find the most preferred node(s)
+                          properties:
+                            podAffinityTerm:
+                              description: Required. A pod affinity term, associated
+                                with the corresponding weight.
+                              properties:
+                                labelSelector:
+                                  description: A label query over a set of resources,
+                                    in this case pods.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
+                                namespaces:
+                                  description: namespaces specifies which namespaces
+                                    the labelSelector applies to (matches against);
+                                    null or empty list means "this pod's namespace"
+                                  items:
+                                    type: string
+                                  type: array
+                                topologyKey:
+                                  description: This pod should be co-located (affinity)
+                                    or not co-located (anti-affinity) with the pods
+                                    matching the labelSelector in the specified namespaces,
+                                    where co-located is defined as running on a node
+                                    whose value of the label with key topologyKey
+                                    matches that of any node on which any of the selected
+                                    pods is running. Empty topologyKey is not allowed.
+                                  type: string
+                              required:
+                              - topologyKey
+                              type: object
+                            weight:
+                              description: weight associated with matching the corresponding
+                                podAffinityTerm, in the range 1-100.
+                              format: int32
+                              type: integer
+                          required:
+                          - podAffinityTerm
+                          - weight
+                          type: object
+                        type: array
+                      requiredDuringSchedulingIgnoredDuringExecution:
+                        description: If the affinity requirements specified by this
+                          field are not met at scheduling time, the pod will not be
+                          scheduled onto the node. If the affinity requirements specified
+                          by this field cease to be met at some point during pod execution
+                          (e.g. due to a pod label update), the system may or may
+                          not try to eventually evict the pod from its node. When
+                          there are multiple elements, the lists of nodes corresponding
+                          to each podAffinityTerm are intersected, i.e. all terms
+                          must be satisfied.
+                        items:
+                          description: Defines a set of pods (namely those matching
+                            the labelSelector relative to the given namespace(s))
+                            that this pod should be co-located (affinity) or not co-located
+                            (anti-affinity) with, where co-located is defined as running
+                            on a node whose value of the label with key <topologyKey>
+                            matches that of any node on which a pod of the set of
+                            pods is running
+                          properties:
+                            labelSelector:
+                              description: A label query over a set of resources,
+                                in this case pods.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
+                            namespaces:
+                              description: namespaces specifies which namespaces the
+                                labelSelector applies to (matches against); null or
+                                empty list means "this pod's namespace"
+                              items:
+                                type: string
+                              type: array
+                            topologyKey:
+                              description: This pod should be co-located (affinity)
+                                or not co-located (anti-affinity) with the pods matching
+                                the labelSelector in the specified namespaces, where
+                                co-located is defined as running on a node whose value
+                                of the label with key topologyKey matches that of
+                                any node on which any of the selected pods is running.
+                                Empty topologyKey is not allowed.
+                              type: string
+                          required:
+                          - topologyKey
+                          type: object
+                        type: array
+                    type: object
+                  podAntiAffinity:
+                    description: Describes pod anti-affinity scheduling rules (e.g.
+                      avoid putting this pod in the same node, zone, etc. as some
+                      other pod(s)).
+                    properties:
+                      preferredDuringSchedulingIgnoredDuringExecution:
+                        description: The scheduler will prefer to schedule pods to
+                          nodes that satisfy the anti-affinity expressions specified
+                          by this field, but it may choose a node that violates one
+                          or more of the expressions. The node that is most preferred
+                          is the one with the greatest sum of weights, i.e. for each
+                          node that meets all of the scheduling requirements (resource
+                          request, requiredDuringScheduling anti-affinity expressions,
+                          etc.), compute a sum by iterating through the elements of
+                          this field and adding "weight" to the sum if the node has
+                          pods which matches the corresponding podAffinityTerm; the
+                          node(s) with the highest sum are the most preferred.
+                        items:
+                          description: The weights of all of the matched WeightedPodAffinityTerm
+                            fields are added per-node to find the most preferred node(s)
+                          properties:
+                            podAffinityTerm:
+                              description: Required. A pod affinity term, associated
+                                with the corresponding weight.
+                              properties:
+                                labelSelector:
+                                  description: A label query over a set of resources,
+                                    in this case pods.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
+                                namespaces:
+                                  description: namespaces specifies which namespaces
+                                    the labelSelector applies to (matches against);
+                                    null or empty list means "this pod's namespace"
+                                  items:
+                                    type: string
+                                  type: array
+                                topologyKey:
+                                  description: This pod should be co-located (affinity)
+                                    or not co-located (anti-affinity) with the pods
+                                    matching the labelSelector in the specified namespaces,
+                                    where co-located is defined as running on a node
+                                    whose value of the label with key topologyKey
+                                    matches that of any node on which any of the selected
+                                    pods is running. Empty topologyKey is not allowed.
+                                  type: string
+                              required:
+                              - topologyKey
+                              type: object
+                            weight:
+                              description: weight associated with matching the corresponding
+                                podAffinityTerm, in the range 1-100.
+                              format: int32
+                              type: integer
+                          required:
+                          - podAffinityTerm
+                          - weight
+                          type: object
+                        type: array
+                      requiredDuringSchedulingIgnoredDuringExecution:
+                        description: If the anti-affinity requirements specified by
+                          this field are not met at scheduling time, the pod will
+                          not be scheduled onto the node. If the anti-affinity requirements
+                          specified by this field cease to be met at some point during
+                          pod execution (e.g. due to a pod label update), the system
+                          may or may not try to eventually evict the pod from its
+                          node. When there are multiple elements, the lists of nodes
+                          corresponding to each podAffinityTerm are intersected, i.e.
+                          all terms must be satisfied.
+                        items:
+                          description: Defines a set of pods (namely those matching
+                            the labelSelector relative to the given namespace(s))
+                            that this pod should be co-located (affinity) or not co-located
+                            (anti-affinity) with, where co-located is defined as running
+                            on a node whose value of the label with key <topologyKey>
+                            matches that of any node on which a pod of the set of
+                            pods is running
+                          properties:
+                            labelSelector:
+                              description: A label query over a set of resources,
+                                in this case pods.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
+                            namespaces:
+                              description: namespaces specifies which namespaces the
+                                labelSelector applies to (matches against); null or
+                                empty list means "this pod's namespace"
+                              items:
+                                type: string
+                              type: array
+                            topologyKey:
+                              description: This pod should be co-located (affinity)
+                                or not co-located (anti-affinity) with the pods matching
+                                the labelSelector in the specified namespaces, where
+                                co-located is defined as running on a node whose value
+                                of the label with key topologyKey matches that of
+                                any node on which any of the selected pods is running.
+                                Empty topologyKey is not allowed.
+                              type: string
+                          required:
+                          - topologyKey
+                          type: object
+                        type: array
+                    type: object
+                type: object
+              initializeRunning:
+                type: boolean
+              network:
+                description: VirtualServerNetwork defines the network configuration
+                  of the VirtualServer
+                properties:
+                  directAttachLoadBalancerIP:
+                    description: If enabled, a TCP Service will be dynamically created,
+                      and its IP directly attached to the VirtualServer DirectAttachLoadBalancerIP
+                      may not be set if UDP or TCP VirtualServerPorts are defined
+                    type: boolean
+                  floatingIPs:
+                    description: FloatingIPs is an array of LoadBalancer Services
+                      The Services LoadBalancer IPs will be used for the floating
+                      IPs of the VirtualServer
+                    items:
+                      description: VirtualServerFloatingIP represents a source that
+                        will be used for a VirtualServer floating IP
+                      properties:
+                        serviceName:
+                          description: The name of an existing LoadBalancer Service
+                            to use as the Floating IP source
+                          type: string
+                      required:
+                      - serviceName
+                      type: object
+                    type: array
+                  tcp:
+                    description: TCP describes a list of tcp ports that are exposed
+                      by the VirtualServer A Service will be dynamically created and
+                      linked to the VirtualServer A maximum of 10 ports may be defined
+                    properties:
+                      ports:
+                        items:
+                          format: int32
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        maxItems: 10
+                        type: array
+                    type: object
+                  udp:
+                    description: UDP describes a list of udp ports that are exposed
+                      by the VirtualServer A Service will be dynamically created and
+                      linked to the VirtualServer A maximum of 10 ports may be defined
+                    properties:
+                      ports:
+                        items:
+                          format: int32
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        maxItems: 10
+                        type: array
+                    type: object
+                type: object
+              os:
+                description: VirtualServerOS defines the Operating System of the VirtualServer
+                properties:
+                  definition:
+                    default: a
+                    description: The operating system configuration definition for
+                      internal use See (INSERT CW DOCS LINK) for details on which
+                      definition value best suits your configuration Defaults to "a"
+                    type: string
+                  type:
+                    description: The Operating System run in the Virtual Server VirtualServerOSType
+                      may be "windows" or "linux"
+                    enum:
+                    - windows
+                    - linux
+                    type: string
+                required:
+                - type
+                type: object
+              region:
+                type: string
+              resources:
+                description: VirtualServerResources defines the resources requested
+                  for the VirtualServer
+                properties:
+                  cpu:
+                    default:
+                      count: 2
+                    description: CPU describes the CPU resource request
+                    properties:
+                      count:
+                        default: 2
+                        description: The number of CPU cores to request
+                        format: int32
+                        type: integer
+                      type:
+                        description: Type is the CPU type to request See (INSERT CW
+                          DOCS LINK) for available CPU types
+                        type: string
+                    type: object
+                  definition:
+                    default: a
+                    description: The resource configuration definition for internal
+                      use See (INSERT CW DOCS LINK) for details on which definition
+                      value best suits your configuration Defaults to "a"
+                    type: string
+                  gpu:
+                    description: GPU describes the GPU resource request
+                    properties:
+                      count:
+                        default: 1
+                        description: The number of GPUs to request Defaults to 1
+                        format: int32
+                        type: integer
+                      type:
+                        description: Type is the GPU type to request See (INSERT CW
+                          DOCS LINK) for available GPU types
+                        type: string
+                    type: object
+                  memory:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    default: 8Gi
+                    description: Memory describes the memory resource request
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                type: object
+              storage:
+                description: VirtualServerStorage describes the Storage request for
+                  the VirtualServer
+                properties:
+                  additionalDisks:
+                    description: AdditionalDisks is an array of disks devices added
+                      to the VirtualServer
+                    items:
+                      description: VirtualServerStorageVolume describes a named volume
+                        in the VirtualServer
+                      properties:
+                        name:
+                          type: string
+                        spec:
+                          description: Represents the source of a volume to mount.
+                            Only one of its members may be specified.
+                          properties:
+                            cloudInitConfigDrive:
+                              description: 'CloudInitConfigDrive represents a cloud-init
+                                Config Drive user-data source. The Config Drive data
+                                will be added as a disk to the vmi. A proper cloud-init
+                                installation is required inside the guest. More info:
+                                https://cloudinit.readthedocs.io/en/latest/topics/datasources/configdrive.html'
+                              properties:
+                                networkData:
+                                  description: NetworkData contains config drive inline
+                                    cloud-init networkdata.
+                                  type: string
+                                networkDataBase64:
+                                  description: NetworkDataBase64 contains config drive
+                                    cloud-init networkdata as a base64 encoded string.
+                                  type: string
+                                networkDataSecretRef:
+                                  description: NetworkDataSecretRef references a k8s
+                                    secret that contains config drive networkdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                secretRef:
+                                  description: UserDataSecretRef references a k8s
+                                    secret that contains config drive userdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                userData:
+                                  description: UserData contains config drive inline
+                                    cloud-init userdata.
+                                  type: string
+                                userDataBase64:
+                                  description: UserDataBase64 contains config drive
+                                    cloud-init userdata as a base64 encoded string.
+                                  type: string
+                              type: object
+                            cloudInitNoCloud:
+                              description: 'CloudInitNoCloud represents a cloud-init
+                                NoCloud user-data source. The NoCloud data will be
+                                added as a disk to the vmi. A proper cloud-init installation
+                                is required inside the guest. More info: http://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html'
+                              properties:
+                                networkData:
+                                  description: NetworkData contains NoCloud inline
+                                    cloud-init networkdata.
+                                  type: string
+                                networkDataBase64:
+                                  description: NetworkDataBase64 contains NoCloud
+                                    cloud-init networkdata as a base64 encoded string.
+                                  type: string
+                                networkDataSecretRef:
+                                  description: NetworkDataSecretRef references a k8s
+                                    secret that contains NoCloud networkdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                secretRef:
+                                  description: UserDataSecretRef references a k8s
+                                    secret that contains NoCloud userdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                userData:
+                                  description: UserData contains NoCloud inline cloud-init
+                                    userdata.
+                                  type: string
+                                userDataBase64:
+                                  description: UserDataBase64 contains NoCloud cloud-init
+                                    userdata as a base64 encoded string.
+                                  type: string
+                              type: object
+                            configMap:
+                              description: 'ConfigMapSource represents a reference
+                                to a ConfigMap in the same namespace. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/'
+                              properties:
+                                name:
+                                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Add other useful fields. apiVersion, kind,
+                                    uid?'
+                                  type: string
+                                optional:
+                                  description: Specify whether the ConfigMap or it's
+                                    keys must be defined
+                                  type: boolean
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            containerDisk:
+                              description: 'ContainerDisk references a docker image,
+                                embedding a qcow or raw disk. More info: https://kubevirt.gitbooks.io/user-guide/registry-disk.html'
+                              properties:
+                                image:
+                                  description: Image is the name of the image with
+                                    the embedded disk.
+                                  type: string
+                                imagePullPolicy:
+                                  description: 'Image pull policy. One of Always,
+                                    Never, IfNotPresent. Defaults to Always if :latest
+                                    tag is specified, or IfNotPresent otherwise. Cannot
+                                    be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images'
+                                  type: string
+                                imagePullSecret:
+                                  description: ImagePullSecret is the name of the
+                                    Docker registry secret required to pull the image.
+                                    The secret must already exist.
+                                  type: string
+                                path:
+                                  description: Path defines the path to disk file
+                                    in the container
+                                  type: string
+                              required:
+                              - image
+                              type: object
+                            dataVolume:
+                              description: DataVolume represents the dynamic creation
+                                a PVC for this volume as well as the process of populating
+                                that PVC with a disk image.
+                              properties:
+                                name:
+                                  description: Name represents the name of the DataVolume
+                                    in the same namespace
+                                  type: string
+                              required:
+                              - name
+                              type: object
+                            downwardAPI:
+                              description: DownwardAPI represents downward API about
+                                the pod that should populate this volume
+                              properties:
+                                fields:
+                                  description: Fields is a list of downward API volume
+                                    file
+                                  items:
+                                    description: DownwardAPIVolumeFile represents
+                                      information to create the file containing the
+                                      pod field
+                                    properties:
+                                      fieldRef:
+                                        description: 'Required: Selects a field of
+                                          the pod: only annotations, labels, name
+                                          and namespace are supported.'
+                                        properties:
+                                          apiVersion:
+                                            description: Version of the schema the
+                                              FieldPath is written in terms of, defaults
+                                              to "v1".
+                                            type: string
+                                          fieldPath:
+                                            description: Path of the field to select
+                                              in the specified API version.
+                                            type: string
+                                        required:
+                                        - fieldPath
+                                        type: object
+                                      mode:
+                                        description: 'Optional: mode bits used to
+                                          set permissions on this file, must be an
+                                          octal value between 0000 and 0777 or a decimal
+                                          value between 0 and 511. YAML accepts both
+                                          octal and decimal values, JSON requires
+                                          decimal values for mode bits. If not specified,
+                                          the volume defaultMode will be used. This
+                                          might be in conflict with other options
+                                          that affect the file mode, like fsGroup,
+                                          and the result can be other mode bits set.'
+                                        format: int32
+                                        type: integer
+                                      path:
+                                        description: 'Required: Path is  the relative
+                                          path name of the file to be created. Must
+                                          not be absolute or contain the ''..'' path.
+                                          Must be utf-8 encoded. The first item of
+                                          the relative path must not start with ''..'''
+                                        type: string
+                                      resourceFieldRef:
+                                        description: 'Selects a resource of the container:
+                                          only resources limits and requests (limits.cpu,
+                                          limits.memory, requests.cpu and requests.memory)
+                                          are currently supported.'
+                                        properties:
+                                          containerName:
+                                            description: 'Container name: required
+                                              for volumes, optional for env vars'
+                                            type: string
+                                          divisor:
+                                            anyOf:
+                                            - type: integer
+                                            - type: string
+                                            description: Specifies the output format
+                                              of the exposed resources, defaults to
+                                              "1"
+                                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                            x-kubernetes-int-or-string: true
+                                          resource:
+                                            description: 'Required: resource to select'
+                                            type: string
+                                        required:
+                                        - resource
+                                        type: object
+                                    required:
+                                    - path
+                                    type: object
+                                  type: array
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            emptyDisk:
+                              description: 'EmptyDisk represents a temporary disk
+                                which shares the vmis lifecycle. More info: https://kubevirt.gitbooks.io/user-guide/disks-and-volumes.html'
+                              properties:
+                                capacity:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  description: Capacity of the sparse disk.
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                              required:
+                              - capacity
+                              type: object
+                            ephemeral:
+                              description: Ephemeral is a special volume source that
+                                "wraps" specified source and provides copy-on-write
+                                image on top of it.
+                              properties:
+                                persistentVolumeClaim:
+                                  description: 'PersistentVolumeClaimVolumeSource
+                                    represents a reference to a PersistentVolumeClaim
+                                    in the same namespace. Directly attached to the
+                                    vmi via qemu. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                  properties:
+                                    claimName:
+                                      description: 'ClaimName is the name of a PersistentVolumeClaim
+                                        in the same namespace as the pod using this
+                                        volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                      type: string
+                                    readOnly:
+                                      description: Will force the ReadOnly setting
+                                        in VolumeMounts. Default false.
+                                      type: boolean
+                                  required:
+                                  - claimName
+                                  type: object
+                              type: object
+                            hostDisk:
+                              description: HostDisk represents a disk created on the
+                                cluster level
+                              properties:
+                                capacity:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  description: Capacity of the sparse disk
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                path:
+                                  description: The path to HostDisk image located
+                                    on the cluster
+                                  type: string
+                                shared:
+                                  description: Shared indicate whether the path is
+                                    shared between nodes
+                                  type: boolean
+                                type:
+                                  description: Contains information if disk.img exists
+                                    or should be created allowed options are 'Disk'
+                                    and 'DiskOrCreate'
+                                  type: string
+                              required:
+                              - path
+                              - type
+                              type: object
+                            persistentVolumeClaim:
+                              description: 'PersistentVolumeClaimVolumeSource represents
+                                a reference to a PersistentVolumeClaim in the same
+                                namespace. Directly attached to the vmi via qemu.
+                                More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                              properties:
+                                claimName:
+                                  description: 'ClaimName is the name of a PersistentVolumeClaim
+                                    in the same namespace as the pod using this volume.
+                                    More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                  type: string
+                                readOnly:
+                                  description: Will force the ReadOnly setting in
+                                    VolumeMounts. Default false.
+                                  type: boolean
+                              required:
+                              - claimName
+                              type: object
+                            secret:
+                              description: 'SecretVolumeSource represents a reference
+                                to a secret data in the same namespace. More info:
+                                https://kubernetes.io/docs/concepts/configuration/secret/'
+                              properties:
+                                optional:
+                                  description: Specify whether the Secret or it's
+                                    keys must be defined
+                                  type: boolean
+                                secretName:
+                                  description: 'Name of the secret in the pod''s namespace
+                                    to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
+                                  type: string
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            serviceAccount:
+                              description: 'ServiceAccountVolumeSource represents
+                                a reference to a service account. There can only be
+                                one volume of this type! More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
+                              properties:
+                                serviceAccountName:
+                                  description: 'Name of the service account in the
+                                    pod''s namespace to use. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
+                                  type: string
+                              type: object
+                          type: object
+                      required:
+                      - name
+                      - spec
+                      type: object
+                    type: array
+                  filesystems:
+                    description: Filesystems is an array of filesystem mounted to
+                      the VirtualServer
+                    items:
+                      description: VirtualServerStorageVolume describes a named volume
+                        in the VirtualServer
+                      properties:
+                        name:
+                          type: string
+                        spec:
+                          description: Represents the source of a volume to mount.
+                            Only one of its members may be specified.
+                          properties:
+                            cloudInitConfigDrive:
+                              description: 'CloudInitConfigDrive represents a cloud-init
+                                Config Drive user-data source. The Config Drive data
+                                will be added as a disk to the vmi. A proper cloud-init
+                                installation is required inside the guest. More info:
+                                https://cloudinit.readthedocs.io/en/latest/topics/datasources/configdrive.html'
+                              properties:
+                                networkData:
+                                  description: NetworkData contains config drive inline
+                                    cloud-init networkdata.
+                                  type: string
+                                networkDataBase64:
+                                  description: NetworkDataBase64 contains config drive
+                                    cloud-init networkdata as a base64 encoded string.
+                                  type: string
+                                networkDataSecretRef:
+                                  description: NetworkDataSecretRef references a k8s
+                                    secret that contains config drive networkdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                secretRef:
+                                  description: UserDataSecretRef references a k8s
+                                    secret that contains config drive userdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                userData:
+                                  description: UserData contains config drive inline
+                                    cloud-init userdata.
+                                  type: string
+                                userDataBase64:
+                                  description: UserDataBase64 contains config drive
+                                    cloud-init userdata as a base64 encoded string.
+                                  type: string
+                              type: object
+                            cloudInitNoCloud:
+                              description: 'CloudInitNoCloud represents a cloud-init
+                                NoCloud user-data source. The NoCloud data will be
+                                added as a disk to the vmi. A proper cloud-init installation
+                                is required inside the guest. More info: http://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html'
+                              properties:
+                                networkData:
+                                  description: NetworkData contains NoCloud inline
+                                    cloud-init networkdata.
+                                  type: string
+                                networkDataBase64:
+                                  description: NetworkDataBase64 contains NoCloud
+                                    cloud-init networkdata as a base64 encoded string.
+                                  type: string
+                                networkDataSecretRef:
+                                  description: NetworkDataSecretRef references a k8s
+                                    secret that contains NoCloud networkdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                secretRef:
+                                  description: UserDataSecretRef references a k8s
+                                    secret that contains NoCloud userdata.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                userData:
+                                  description: UserData contains NoCloud inline cloud-init
+                                    userdata.
+                                  type: string
+                                userDataBase64:
+                                  description: UserDataBase64 contains NoCloud cloud-init
+                                    userdata as a base64 encoded string.
+                                  type: string
+                              type: object
+                            configMap:
+                              description: 'ConfigMapSource represents a reference
+                                to a ConfigMap in the same namespace. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/'
+                              properties:
+                                name:
+                                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Add other useful fields. apiVersion, kind,
+                                    uid?'
+                                  type: string
+                                optional:
+                                  description: Specify whether the ConfigMap or it's
+                                    keys must be defined
+                                  type: boolean
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            containerDisk:
+                              description: 'ContainerDisk references a docker image,
+                                embedding a qcow or raw disk. More info: https://kubevirt.gitbooks.io/user-guide/registry-disk.html'
+                              properties:
+                                image:
+                                  description: Image is the name of the image with
+                                    the embedded disk.
+                                  type: string
+                                imagePullPolicy:
+                                  description: 'Image pull policy. One of Always,
+                                    Never, IfNotPresent. Defaults to Always if :latest
+                                    tag is specified, or IfNotPresent otherwise. Cannot
+                                    be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images'
+                                  type: string
+                                imagePullSecret:
+                                  description: ImagePullSecret is the name of the
+                                    Docker registry secret required to pull the image.
+                                    The secret must already exist.
+                                  type: string
+                                path:
+                                  description: Path defines the path to disk file
+                                    in the container
+                                  type: string
+                              required:
+                              - image
+                              type: object
+                            dataVolume:
+                              description: DataVolume represents the dynamic creation
+                                a PVC for this volume as well as the process of populating
+                                that PVC with a disk image.
+                              properties:
+                                name:
+                                  description: Name represents the name of the DataVolume
+                                    in the same namespace
+                                  type: string
+                              required:
+                              - name
+                              type: object
+                            downwardAPI:
+                              description: DownwardAPI represents downward API about
+                                the pod that should populate this volume
+                              properties:
+                                fields:
+                                  description: Fields is a list of downward API volume
+                                    file
+                                  items:
+                                    description: DownwardAPIVolumeFile represents
+                                      information to create the file containing the
+                                      pod field
+                                    properties:
+                                      fieldRef:
+                                        description: 'Required: Selects a field of
+                                          the pod: only annotations, labels, name
+                                          and namespace are supported.'
+                                        properties:
+                                          apiVersion:
+                                            description: Version of the schema the
+                                              FieldPath is written in terms of, defaults
+                                              to "v1".
+                                            type: string
+                                          fieldPath:
+                                            description: Path of the field to select
+                                              in the specified API version.
+                                            type: string
+                                        required:
+                                        - fieldPath
+                                        type: object
+                                      mode:
+                                        description: 'Optional: mode bits used to
+                                          set permissions on this file, must be an
+                                          octal value between 0000 and 0777 or a decimal
+                                          value between 0 and 511. YAML accepts both
+                                          octal and decimal values, JSON requires
+                                          decimal values for mode bits. If not specified,
+                                          the volume defaultMode will be used. This
+                                          might be in conflict with other options
+                                          that affect the file mode, like fsGroup,
+                                          and the result can be other mode bits set.'
+                                        format: int32
+                                        type: integer
+                                      path:
+                                        description: 'Required: Path is  the relative
+                                          path name of the file to be created. Must
+                                          not be absolute or contain the ''..'' path.
+                                          Must be utf-8 encoded. The first item of
+                                          the relative path must not start with ''..'''
+                                        type: string
+                                      resourceFieldRef:
+                                        description: 'Selects a resource of the container:
+                                          only resources limits and requests (limits.cpu,
+                                          limits.memory, requests.cpu and requests.memory)
+                                          are currently supported.'
+                                        properties:
+                                          containerName:
+                                            description: 'Container name: required
+                                              for volumes, optional for env vars'
+                                            type: string
+                                          divisor:
+                                            anyOf:
+                                            - type: integer
+                                            - type: string
+                                            description: Specifies the output format
+                                              of the exposed resources, defaults to
+                                              "1"
+                                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                            x-kubernetes-int-or-string: true
+                                          resource:
+                                            description: 'Required: resource to select'
+                                            type: string
+                                        required:
+                                        - resource
+                                        type: object
+                                    required:
+                                    - path
+                                    type: object
+                                  type: array
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            emptyDisk:
+                              description: 'EmptyDisk represents a temporary disk
+                                which shares the vmis lifecycle. More info: https://kubevirt.gitbooks.io/user-guide/disks-and-volumes.html'
+                              properties:
+                                capacity:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  description: Capacity of the sparse disk.
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                              required:
+                              - capacity
+                              type: object
+                            ephemeral:
+                              description: Ephemeral is a special volume source that
+                                "wraps" specified source and provides copy-on-write
+                                image on top of it.
+                              properties:
+                                persistentVolumeClaim:
+                                  description: 'PersistentVolumeClaimVolumeSource
+                                    represents a reference to a PersistentVolumeClaim
+                                    in the same namespace. Directly attached to the
+                                    vmi via qemu. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                  properties:
+                                    claimName:
+                                      description: 'ClaimName is the name of a PersistentVolumeClaim
+                                        in the same namespace as the pod using this
+                                        volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                      type: string
+                                    readOnly:
+                                      description: Will force the ReadOnly setting
+                                        in VolumeMounts. Default false.
+                                      type: boolean
+                                  required:
+                                  - claimName
+                                  type: object
+                              type: object
+                            hostDisk:
+                              description: HostDisk represents a disk created on the
+                                cluster level
+                              properties:
+                                capacity:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  description: Capacity of the sparse disk
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                path:
+                                  description: The path to HostDisk image located
+                                    on the cluster
+                                  type: string
+                                shared:
+                                  description: Shared indicate whether the path is
+                                    shared between nodes
+                                  type: boolean
+                                type:
+                                  description: Contains information if disk.img exists
+                                    or should be created allowed options are 'Disk'
+                                    and 'DiskOrCreate'
+                                  type: string
+                              required:
+                              - path
+                              - type
+                              type: object
+                            persistentVolumeClaim:
+                              description: 'PersistentVolumeClaimVolumeSource represents
+                                a reference to a PersistentVolumeClaim in the same
+                                namespace. Directly attached to the vmi via qemu.
+                                More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                              properties:
+                                claimName:
+                                  description: 'ClaimName is the name of a PersistentVolumeClaim
+                                    in the same namespace as the pod using this volume.
+                                    More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                                  type: string
+                                readOnly:
+                                  description: Will force the ReadOnly setting in
+                                    VolumeMounts. Default false.
+                                  type: boolean
+                              required:
+                              - claimName
+                              type: object
+                            secret:
+                              description: 'SecretVolumeSource represents a reference
+                                to a secret data in the same namespace. More info:
+                                https://kubernetes.io/docs/concepts/configuration/secret/'
+                              properties:
+                                optional:
+                                  description: Specify whether the Secret or it's
+                                    keys must be defined
+                                  type: boolean
+                                secretName:
+                                  description: 'Name of the secret in the pod''s namespace
+                                    to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
+                                  type: string
+                                volumeLabel:
+                                  description: The volume label of the resulting disk
+                                    inside the VMI. Different bootstrapping mechanisms
+                                    require different values. Typical values are "cidata"
+                                    (cloud-init), "config-2" (cloud-init) or "OEMDRV"
+                                    (kickstart).
+                                  type: string
+                              type: object
+                            serviceAccount:
+                              description: 'ServiceAccountVolumeSource represents
+                                a reference to a service account. There can only be
+                                one volume of this type! More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
+                              properties:
+                                serviceAccountName:
+                                  description: 'Name of the service account in the
+                                    pod''s namespace to use. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
+                                  type: string
+                              type: object
+                          type: object
+                      required:
+                      - name
+                      - spec
+                      type: object
+                    type: array
+                  root:
+                    description: Root describes the root filesystem of the VirtualServer
+                    properties:
+                      accessMode:
+                        description: AccessMode specifies the AccessMode of the root
+                          filesystem PVC
+                        type: string
+                      size:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        description: Size specifies the root filesystem volume size
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      source:
+                        description: Source describes the DataVolumeSource for the
+                          root filesystem DataVolume A DataVolume will be dynamically
+                          created alongside the VirtualServer, and the underlying
+                          PVC will be mounted as the root filesystem
+                        properties:
+                          blank:
+                            description: DataVolumeBlankImage provides the parameters
+                              to create a new raw blank image for the PVC
+                            type: object
+                          http:
+                            description: DataVolumeSourceHTTP can be either an http
+                              or https endpoint, with an optional basic auth user
+                              name and password, and an optional configmap containing
+                              additional CAs
+                            properties:
+                              certConfigMap:
+                                description: CertConfigMap is a configmap reference,
+                                  containing a Certificate Authority(CA) public key,
+                                  and a base64 encoded pem certificate
+                                type: string
+                              secretRef:
+                                description: SecretRef A Secret reference, the secret
+                                  should contain accessKeyId (user name) base64 encoded,
+                                  and secretKey (password) also base64 encoded
+                                type: string
+                              url:
+                                description: URL is the URL of the http(s) endpoint
+                                type: string
+                            required:
+                            - url
+                            type: object
+                          imageio:
+                            description: DataVolumeSourceImageIO provides the parameters
+                              to create a Data Volume from an imageio source
+                            properties:
+                              certConfigMap:
+                                description: CertConfigMap provides a reference to
+                                  the CA cert
+                                type: string
+                              diskId:
+                                description: DiskID provides id of a disk to be imported
+                                type: string
+                              secretRef:
+                                description: SecretRef provides the secret reference
+                                  needed to access the ovirt-engine
+                                type: string
+                              url:
+                                description: URL is the URL of the ovirt-engine
+                                type: string
+                            required:
+                            - diskId
+                            - url
+                            type: object
+                          pvc:
+                            description: DataVolumeSourcePVC provides the parameters
+                              to create a Data Volume from an existing PVC
+                            properties:
+                              name:
+                                description: The name of the source PVC
+                                type: string
+                              namespace:
+                                description: The namespace of the source PVC
+                                type: string
+                            required:
+                            - name
+                            - namespace
+                            type: object
+                          registry:
+                            description: DataVolumeSourceRegistry provides the parameters
+                              to create a Data Volume from an registry source
+                            properties:
+                              certConfigMap:
+                                description: CertConfigMap provides a reference to
+                                  the Registry certs
+                                type: string
+                              secretRef:
+                                description: SecretRef provides the secret reference
+                                  needed to access the Registry source
+                                type: string
+                              url:
+                                description: URL is the url of the Docker registry
+                                  source
+                                type: string
+                            required:
+                            - url
+                            type: object
+                          s3:
+                            description: DataVolumeSourceS3 provides the parameters
+                              to create a Data Volume from an S3 source
+                            properties:
+                              secretRef:
+                                description: SecretRef provides the secret reference
+                                  needed to access the S3 source
+                                type: string
+                              url:
+                                description: URL is the url of the S3 source
+                                type: string
+                            required:
+                            - url
+                            type: object
+                          upload:
+                            description: DataVolumeSourceUpload provides the parameters
+                              to create a Data Volume by uploading the source
+                            type: object
+                          vddk:
+                            description: DataVolumeSourceVDDK provides the parameters
+                              to create a Data Volume from a Vmware source
+                            properties:
+                              backingFile:
+                                description: BackingFile is the path to the virtual
+                                  hard disk to migrate from vCenter/ESXi
+                                type: string
+                              secretRef:
+                                description: SecretRef provides a reference to a secret
+                                  containing the username and password needed to access
+                                  the vCenter or ESXi host
+                                type: string
+                              thumbprint:
+                                description: Thumbprint is the certificate thumbprint
+                                  of the vCenter or ESXi host
+                                type: string
+                              url:
+                                description: URL is the URL of the vCenter or ESXi
+                                  host with the VM to migrate
+                                type: string
+                              uuid:
+                                description: UUID is the UUID of the virtual machine
+                                  that the backing file is attached to in vCenter/ESXi
+                                type: string
+                            type: object
+                        type: object
+                      storageClassName:
+                        description: StorageClassName specifies the StorageClassName
+                          of the root filesystem PVC
+                        type: string
+                      volumeMode:
+                        description: VolumeMode specifies the VolumeMode of the root
+                          filesystem PVC
+                        type: string
+                    required:
+                    - accessMode
+                    - size
+                    - source
+                    - storageClassName
+                    - volumeMode
+                    type: object
+                  swap:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: Swap describes a swap volume of the specified size
+                      added to the VirtualServer An emptyDisk is created of the specified
+                      size to be used as the swap disk
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                required:
+                - root
+                type: object
+              users:
+                items:
+                  description: VirtualServerUser defines user login information in
+                    the VirtualServer The user login information will be used to configure
+                    the VirtualServer via cloudinit if supported
+                  properties:
+                    password:
+                      type: string
+                    username:
+                      type: string
+                  required:
+                  - username
+                  type: object
+                type: array
+            required:
+            - network
+            - os
+            - resources
+            - storage
+            - users
+            type: object
+          status:
+            description: VirtualServerStatus defines the observed state of VirtualServer
+            properties:
+              conditions:
+                items:
+                  description: "Condition contains details for one aspect of the current
+                    state of this API Resource. --- This struct is intended for direct
+                    use as an array at the field path .status.conditions.  For example,
+                    type FooStatus struct{     // Represents the observations of a
+                    foo's current state.     // Known .status.conditions.type are:
+                    \"Available\", \"Progressing\", and \"Degraded\"     // +patchMergeKey=type
+                    \    // +patchStrategy=merge     // +listType=map     // +listMapKey=type
+                    \    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`
+                    \n     // other fields }"
+                  properties:
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
