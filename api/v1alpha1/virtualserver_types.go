@@ -86,7 +86,7 @@ type VirtualServerOS struct {
 	// +kubebuilder:validation:Enum=windows;linux
 	Type VirtualServerOSType `json:"type"`
 	// The operating system configuration definition for internal use
-	// See (INSERT CW DOCS LINK) for details on which definition value best suits your configuration
+	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration
 	// Defaults to "a"
 	// +optional
 	// +kubebuilder:default=a
@@ -96,7 +96,7 @@ type VirtualServerOS struct {
 // VirtualServerResources defines the resources requested for the VirtualServer
 type VirtualServerResources struct {
 	// The resource configuration definition for internal use
-	// See (INSERT CW DOCS LINK) for details on which definition value best suits your configuration
+	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration
 	// Defaults to "a"
 	// +optional
 	// +kubebuilder:default=a
@@ -117,24 +117,26 @@ type VirtualServerResources struct {
 // VirtualServerResourceGPU describes the GPU request for the VirtualServer
 type VirtualServerResourceCPU struct {
 	// Type is the CPU type to request
-	// See (INSERT CW DOCS LINK) for available CPU types
+	// See Coreweave Metadata API for available CPU types
 	// +optional
 	Type *string `json:"type,omitempty"`
 	// The number of CPU cores to request
 	// +optional
 	// +kubebuilder:default=2
+	// +kubebuilder:validation:Minimum=1
 	Count uint32 `json:"count"`
 }
 
 // VirtualServerResourceGPU describes the GPU request for the VirtualServer
 type VirtualServerResourceGPU struct {
 	// Type is the GPU type to request
-	// See (INSERT CW DOCS LINK) for available GPU types
+	// See Coreweave Metadata API for available GPU types
 	Type *string `json:"type,omitempty"`
 	// The number of GPUs to request
 	// Defaults to 1
 	// +optional
 	// +kubebuilder:default=1
+	// +kubebuilder:validation:Minimum=1
 	Count uint32 `json:"count"`
 }
 

@@ -133,12 +133,8 @@ func (vs *VirtualServer) SetCPUType(cpuType string) error {
 }
 
 // Set the VirtualServer CPU core count
-func (vs *VirtualServer) SetCPUCount(gpuCount uint32) error {
-	if vs.Spec.Resources.GPU.Type != nil {
-		return fmt.Errorf("CPU count cannot be set if GPU type is set")
-	}
-	vs.Spec.Resources.CPU.Count = gpuCount
-	return nil
+func (vs *VirtualServer) SetCPUCount(cpuCount uint32) {
+	vs.Spec.Resources.CPU.Count = cpuCount
 }
 
 // Set the VirtualServer GPU type

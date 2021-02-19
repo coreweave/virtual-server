@@ -705,8 +705,9 @@ spec:
                   definition:
                     default: a
                     description: The operating system configuration definition for
-                      internal use See (INSERT CW DOCS LINK) for details on which
-                      definition value best suits your configuration Defaults to "a"
+                      internal use See https://docs.coreweave.com/virtual-desktop
+                      for details on which definition value best suits your configuration
+                      Defaults to "a"
                     type: string
                   type:
                     description: The Operating System run in the Virtual Server VirtualServerOSType
@@ -733,17 +734,19 @@ spec:
                         default: 2
                         description: The number of CPU cores to request
                         format: int32
+                        minimum: 1
                         type: integer
                       type:
-                        description: Type is the CPU type to request See (INSERT CW
-                          DOCS LINK) for available CPU types
+                        description: Type is the CPU type to request See Coreweave
+                          Metadata API for available CPU types
                         type: string
                     type: object
                   definition:
                     default: a
                     description: The resource configuration definition for internal
-                      use See (INSERT CW DOCS LINK) for details on which definition
-                      value best suits your configuration Defaults to "a"
+                      use See https://docs.coreweave.com/virtual-desktop for details
+                      on which definition value best suits your configuration Defaults
+                      to "a"
                     type: string
                   gpu:
                     description: GPU describes the GPU resource request
@@ -752,10 +755,11 @@ spec:
                         default: 1
                         description: The number of GPUs to request Defaults to 1
                         format: int32
+                        minimum: 1
                         type: integer
                       type:
-                        description: Type is the GPU type to request See (INSERT CW
-                          DOCS LINK) for available GPU types
+                        description: Type is the GPU type to request See Coreweave
+                          Metadata API for available GPU types
                         type: string
                     type: object
                   memory:

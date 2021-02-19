@@ -20,6 +20,7 @@ func Example_create() {
 		fmt.Println("Failed to create client")
 		os.Exit(1)
 	}
+	vsv1alpha.AddToScheme(c.Scheme())
 
 	// Create a new VirtualServer with the name "my-virtual-server" to be deployed in the "default" namespace
 	virtualServer := vsv1alpha.NewVirtualServer("my-virtual-server", "default")
@@ -43,7 +44,7 @@ func Example_create() {
 	// Configure the root filesystem of the VirtualServer to clone a preexisting PVC named ubuntu1804-docker-master-20210210-ewr1
 	// sourced in the vd-images namespace
 	err = virtualServer.ConfigureStorageRootWithPVCSource(vsv1alpha.VirtualServerStorageRootPVCSource{
-		Size:             "128Gi",
+		Size:             "40Gi",
 		PVCName:          "ubuntu1804-docker-master-20210210-ewr1",
 		PVCNamespace:     "vd-images",
 		StorageClassName: "block-nvme-ewr1",
@@ -76,6 +77,7 @@ func Example_get() {
 		fmt.Println("Failed to create client")
 		os.Exit(1)
 	}
+	vsv1alpha.AddToScheme(c.Scheme())
 
 	virtualServer := &vsv1alpha.VirtualServer{}
 	// Get the VirtualServer named "my-virtual-server" in the "default" namespace
@@ -103,6 +105,7 @@ func Example_getStatus() {
 		fmt.Println("Failed to create client")
 		os.Exit(1)
 	}
+	vsv1alpha.AddToScheme(c.Scheme())
 
 	virtualServer := &vsv1alpha.VirtualServer{}
 	// Get the VirtualServer named "my-virtual-server" in the "default" namespace
