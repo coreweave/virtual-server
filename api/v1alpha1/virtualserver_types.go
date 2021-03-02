@@ -86,7 +86,7 @@ type VirtualServerOS struct {
 	// +kubebuilder:validation:Enum=windows;linux
 	Type VirtualServerOSType `json:"type"`
 	// The operating system configuration definition for internal use
-	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration
+	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration.
 	// Defaults to "a"
 	// +optional
 	// +kubebuilder:default=a
@@ -96,7 +96,7 @@ type VirtualServerOS struct {
 // VirtualServerResources defines the resources requested for the VirtualServer
 type VirtualServerResources struct {
 	// The resource configuration definition for internal use
-	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration
+	// See https://docs.coreweave.com/virtual-desktop for details on which definition value best suits your configuration.
 	// Defaults to "a"
 	// +optional
 	// +kubebuilder:default=a
@@ -132,7 +132,7 @@ type VirtualServerResourceGPU struct {
 	// Type is the GPU type to request
 	// See Coreweave Metadata API for available GPU types
 	Type *string `json:"type,omitempty"`
-	// The number of GPUs to request
+	// The number of GPUs to request.
 	// Defaults to 1
 	// +optional
 	// +kubebuilder:default=1
@@ -162,10 +162,16 @@ type VirtualServerStorageRoot struct {
 	Source cdiv1alpha.DataVolumeSource `json:"source"`
 	// StorageClassName specifies the StorageClassName of the root filesystem PVC
 	StorageClassName string `json:"storageClassName"`
-	// VolumeMode specifies the VolumeMode of the root filesystem PVC
-	VolumeMode corev1.PersistentVolumeMode `json:"volumeMode"`
-	// AccessMode specifies the AccessMode of the root filesystem PVC
-	AccessMode corev1.PersistentVolumeAccessMode `json:"accessMode"`
+	// VolumeMode specifies the VolumeMode of the root filesystem PVC.
+	// Defaults to Block
+	// +kubebuilder:default=Block
+	// +optional
+	VolumeMode corev1.PersistentVolumeMode `json:"volumeMode,omitempty"`
+	// AccessMode specifies the AccessMode of the root filesystem PVC.
+	// Defaults to ReadWriteOnce
+	// +kubebuilder:default=ReadWriteOnce
+	// +optional
+	AccessMode corev1.PersistentVolumeAccessMode `json:"accessMode,omitempty"`
 }
 
 // VirtualServerStorageVolume describes a named volume in the VirtualServer

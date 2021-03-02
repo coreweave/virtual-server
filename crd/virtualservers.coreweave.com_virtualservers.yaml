@@ -706,7 +706,7 @@ spec:
                     default: a
                     description: The operating system configuration definition for
                       internal use See https://docs.coreweave.com/virtual-desktop
-                      for details on which definition value best suits your configuration
+                      for details on which definition value best suits your configuration.
                       Defaults to "a"
                     type: string
                   type:
@@ -745,7 +745,7 @@ spec:
                     default: a
                     description: The resource configuration definition for internal
                       use See https://docs.coreweave.com/virtual-desktop for details
-                      on which definition value best suits your configuration Defaults
+                      on which definition value best suits your configuration. Defaults
                       to "a"
                     type: string
                   gpu:
@@ -753,7 +753,7 @@ spec:
                     properties:
                       count:
                         default: 1
-                        description: The number of GPUs to request Defaults to 1
+                        description: The number of GPUs to request. Defaults to 1
                         format: int32
                         minimum: 1
                         type: integer
@@ -1519,8 +1519,9 @@ spec:
                     description: Root describes the root filesystem of the VirtualServer
                     properties:
                       accessMode:
+                        default: ReadWriteOnce
                         description: AccessMode specifies the AccessMode of the root
-                          filesystem PVC
+                          filesystem PVC. Defaults to ReadWriteOnce
                         type: string
                       size:
                         anyOf:
@@ -1666,15 +1667,14 @@ spec:
                           of the root filesystem PVC
                         type: string
                       volumeMode:
+                        default: Block
                         description: VolumeMode specifies the VolumeMode of the root
-                          filesystem PVC
+                          filesystem PVC. Defaults to Block
                         type: string
                     required:
-                    - accessMode
                     - size
                     - source
                     - storageClassName
-                    - volumeMode
                     type: object
                   swap:
                     anyOf:
