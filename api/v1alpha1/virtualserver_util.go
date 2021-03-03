@@ -83,8 +83,9 @@ func (vs *VirtualServer) UpdateVirtualMachineStartedCondition(running bool) {
 	vs.SetCondition(VSConditionTypeStarted, status, reason, nil, false)
 }
 
-// InitializeConditions sets the default VirtualServer status conditions
-func (vs *VirtualServer) InitializeConditions() {
+// InitializeStatus sets the default VirtualServer status and conditions
+func (vs *VirtualServer) InitializeStatus() {
+	vs.Status.Network.FloatingIPs = make(map[string]string)
 	vs.SetCondition(VSConditionTypeReady, metav1.ConditionUnknown, VSConditionReasonInitializing, nil, false)
 	vs.SetCondition(VSConditionTypeServicesReady, metav1.ConditionUnknown, VSConditionReasonInitializing, nil, false)
 	vs.SetCondition(VSConditionTypeVMReady, metav1.ConditionUnknown, VSConditionReasonInitializing, nil, false)

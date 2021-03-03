@@ -43,7 +43,8 @@ type VirtualServerSpec struct {
 
 // VirtualServerStatus defines the observed state of VirtualServer
 type VirtualServerStatus struct {
-	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	Conditions []metav1.Condition         `json:"conditions,omitempty"`
+	Network    VirtualServerNetworkStatus `json:"network,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -220,6 +221,13 @@ type Port int32
 type VirtualServerFloatingIP struct {
 	// The name of an existing LoadBalancer Service to use as the Floating IP source
 	SericeName string `json:"serviceName"`
+}
+
+type VirtualServerNetworkStatus struct {
+	InternalIP  *string           `json:"internalIP,omitempty"`
+	TCP         *string           `json:"tcpIP,omitempty"`
+	UDP         *string           `json:"udpIP,omitempty"`
+	FloatingIPs map[string]string `json:"floatingIPs,omitempty"`
 }
 
 type VirtualServerOSType string
