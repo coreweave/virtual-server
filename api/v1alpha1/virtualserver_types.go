@@ -259,6 +259,8 @@ const (
 	VSConditionReasonInitializing VirtualServerConditionReason = "Initializing"
 	// VSConditionReasonPending indicates that the VirtualServer is pending an update to its spec
 	VSConditionReasonPending VirtualServerConditionReason = "Pending"
+	// VSConditionReasonTerminating indicates that a VirtualServer resource is terminating
+	VSConditionReasonTerminating VirtualServerConditionReason = "Terminating"
 	// VSConditionReasonFailed indicates that the VirtualServer was not able to create or start
 	VSConditionReasonFailed VirtualServerConditionReason = "Failed"
 	// VSConditionReasonReady indicates that the VirtualServer has successfully been created and is ready for use
