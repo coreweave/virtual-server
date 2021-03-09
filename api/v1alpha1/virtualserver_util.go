@@ -152,7 +152,7 @@ func (vs *VirtualServer) SetGPUCount(gpuCount uint32) error {
 	if vs.Spec.Resources.CPU.Type != nil {
 		return fmt.Errorf("GPU count cannot be set if CPU type is set")
 	}
-	vs.Spec.Resources.GPU.Count = gpuCount
+	vs.Spec.Resources.GPU.Count = &gpuCount
 	return nil
 }
 

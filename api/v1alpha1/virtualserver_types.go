@@ -36,7 +36,8 @@ type VirtualServerSpec struct {
 	Resources VirtualServerResources `json:"resources"`
 	Storage   VirtualServerStorage   `json:"storage"`
 	Users     []VirtualServerUser    `json:"users"`
-	Network   VirtualServerNetwork   `json:"network"`
+	// +optional
+	Network VirtualServerNetwork `json:"network"`
 	// +optional
 	InitializeRunning bool `json:"initializeRunning,omitempty"`
 }
@@ -115,7 +116,7 @@ type VirtualServerResources struct {
 	Memory resource.Quantity `json:"memory,omitempty"`
 }
 
-// VirtualServerResourceGPU describes the GPU request for the VirtualServer
+// VirtualServerResourceCPU describes the CPU request for the VirtualServer
 type VirtualServerResourceCPU struct {
 	// Type is the CPU type to request
 	// See Coreweave Metadata API for available CPU types
@@ -138,7 +139,7 @@ type VirtualServerResourceGPU struct {
 	// +optional
 	// +kubebuilder:default=1
 	// +kubebuilder:validation:Minimum=1
-	Count uint32 `json:"count"`
+	Count *uint32 `json:"count,omitempty"`
 }
 
 // VirtualServerStorage describes the Storage request for the VirtualServer
