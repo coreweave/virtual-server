@@ -199,6 +199,14 @@ func (vs *VirtualServer) ExposeTCPPorts(ports []int32) error {
 	return nil
 }
 
+func (vs *VirtualServer) EnableTCPPublicIP(enable bool) {
+	vs.Spec.Network.TCP.Public = enable
+}
+
+func (vs *VirtualServer) EnableUDPPublicIP(enable bool) {
+	vs.Spec.Network.TCP.Public = enable
+}
+
 // Expose a UDP port on the VirtualServer
 func (vs *VirtualServer) ExposeUDPPort(port int32) error {
 	return vs.exposePort(port, corev1.ProtocolUDP)
