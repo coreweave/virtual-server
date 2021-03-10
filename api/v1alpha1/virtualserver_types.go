@@ -200,18 +200,24 @@ type VirtualServerNetwork struct {
 	// TCP describes a list of tcp ports that are exposed by the VirtualServer
 	// A Service will be dynamically created and linked to the VirtualServer
 	// A maximum of 10 ports may be defined
-	TCP VirtualServerPorts `json:"tcp,omitempty"`
+	TCP VirtualServerServiceTemplate `json:"tcp,omitempty"`
 	// UDP describes a list of udp ports that are exposed by the VirtualServer
 	// A Service will be dynamically created and linked to the VirtualServer
 	// A maximum of 10 ports may be defined
-	UDP VirtualServerPorts `json:"udp,omitempty"`
+	UDP VirtualServerServiceTemplate `json:"udp,omitempty"`
 }
 
-// VirtualServerPorts defines list of ports
-// The list is constrained to a maximum of 10 ports
-type VirtualServerPorts struct {
+// VirtualServerServiceTemplate defines a service created by the VirtualServer
+type VirtualServerServiceTemplate struct {
+	// A list of ports.
+	// The list is constrained to a maximum of 10 ports
 	// +kubebuilder:validation:MaxItems=10
 	Ports []Port `json:"ports,omitempty"`
+	// If Public is true a public IP will be assigned to the service.
+	// Defaults to true
+	// +optional
+	// +kubebuilder:default=true
+	Public bool `json:"public"`
 }
 
 // +kubebuilder:validation:Minimum=1

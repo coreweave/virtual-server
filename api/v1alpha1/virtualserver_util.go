@@ -220,22 +220,22 @@ func (vs *VirtualServer) exposePort(port int32, protocol corev1.Protocol) error 
 		return fmt.Errorf("Ports cannot be exposed if DirectAttachLoadBalancerIP is enabled")
 	}
 
-	var ports []Port
+	var ports *[]Port
 	if protocol == corev1.ProtocolTCP {
-		ports = vs.Spec.Network.TCP.Ports
+		ports = &vs.Spec.Network.TCP.Ports
 	} else if protocol == corev1.ProtocolUDP {
-		ports = vs.Spec.Network.UDP.Ports
+		ports = &vs.Spec.Network.UDP.Ports
 	}
 
-	if len(ports) >= 10 {
+	if len(*ports) >= 10 {
 		return fmt.Errorf("A maximum of 10 exposed ports are permitted")
 	}
-	for _, p := range ports {
+	for _, p := range *ports {
 		if int32(p) == port {
 			return nil
 		}
 	}
-	ports = append(ports, Port(port))
+	*ports = append(*ports, Port(port))
 	return nil
 }
 
@@ -408,4 +408,37 @@ func (vs *VirtualServer) GetReadyStatus() *metav1.Condition {
 		return nil
 	}
 	return condition.DeepCopy()
+}
+
+func (vs *VirtualServer) GetVMReadyStatus() *metav1.Condition {
+	condition := apimeta.FindStatusCondition(vs.Status.Conditions, string(VSConditionTypeVMReady))
+	if condition == nil {
+		return nil
+	}
+	return condition.DeepCopy()
+}
+
+func (s *VirtualServerStatus) InternalIP() string {
+	if s.Network.InternalIP != nil {
+		return *s.Network.InternalIP
+	}
+	return ""
+}
+
+func (s *VirtualServerStatus) TCP() string {
+	if s.Network.InternalIP != nil {
+		return *s.Network.TCP
+	}
+	return ""
+}
+
+func (s *VirtualServerStatus) UDP() string {
+	if s.Network.InternalIP != nil {
+		return *s.Network.UDP
+	}
+	return ""
+}
+
+func (s *VirtualServerStatus) FloatingIPs() map[string]string {
+	return s.Network.FloatingIPs
 }

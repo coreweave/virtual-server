@@ -676,6 +676,8 @@ spec:
                       linked to the VirtualServer A maximum of 10 ports may be defined
                     properties:
                       ports:
+                        description: A list of ports. The list is constrained to a
+                          maximum of 10 ports
                         items:
                           format: int32
                           maximum: 65535
@@ -683,6 +685,11 @@ spec:
                           type: integer
                         maxItems: 10
                         type: array
+                      public:
+                        default: true
+                        description: If Public is true a public IP will be assigned
+                          to the service. Defaults to true
+                        type: boolean
                     type: object
                   udp:
                     description: UDP describes a list of udp ports that are exposed
@@ -690,6 +697,8 @@ spec:
                       linked to the VirtualServer A maximum of 10 ports may be defined
                     properties:
                       ports:
+                        description: A list of ports. The list is constrained to a
+                          maximum of 10 ports
                         items:
                           format: int32
                           maximum: 65535
@@ -697,6 +706,11 @@ spec:
                           type: integer
                         maxItems: 10
                         type: array
+                      public:
+                        default: true
+                        description: If Public is true a public IP will be assigned
+                          to the service. Defaults to true
+                        type: boolean
                     type: object
                 type: object
               os:
