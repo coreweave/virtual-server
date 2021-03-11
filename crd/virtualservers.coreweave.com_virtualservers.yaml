@@ -650,7 +650,7 @@ spec:
                   of the VirtualServer
                 properties:
                   directAttachLoadBalancerIP:
-                    description: If enabled, a TCP Service will be dynamically created,
+                    description: If enabled, a Service will be dynamically created,
                       and its IP directly attached to the VirtualServer DirectAttachLoadBalancerIP
                       may not be set if UDP or TCP VirtualServerPorts are defined
                     type: boolean
@@ -670,6 +670,11 @@ spec:
                       - serviceName
                       type: object
                     type: array
+                  public:
+                    default: true
+                    description: If Public is true a public IP will be assigned to
+                      the created Services Defaults to true
+                    type: boolean
                   tcp:
                     description: TCP describes a list of tcp ports that are exposed
                       by the VirtualServer A Service will be dynamically created and
@@ -685,11 +690,6 @@ spec:
                           type: integer
                         maxItems: 10
                         type: array
-                      public:
-                        default: true
-                        description: If Public is true a public IP will be assigned
-                          to the service. Defaults to true
-                        type: boolean
                     type: object
                   udp:
                     description: UDP describes a list of udp ports that are exposed
@@ -706,11 +706,6 @@ spec:
                           type: integer
                         maxItems: 10
                         type: array
-                      public:
-                        default: true
-                        description: If Public is true a public IP will be assigned
-                          to the service. Defaults to true
-                        type: boolean
                     type: object
                 type: object
               os:

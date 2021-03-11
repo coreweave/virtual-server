@@ -191,7 +191,7 @@ type VirtualServerUser struct {
 
 // VirtualServerNetwork defines the network configuration of the VirtualServer
 type VirtualServerNetwork struct {
-	// If enabled, a TCP Service will be dynamically created, and its IP directly attached to the VirtualServer
+	// If enabled, a Service will be dynamically created, and its IP directly attached to the VirtualServer
 	// DirectAttachLoadBalancerIP may not be set if UDP or TCP VirtualServerPorts are defined
 	DirectAttachLoadBalancerIP bool `json:"directAttachLoadBalancerIP,omitempty"`
 	// FloatingIPs is an array of LoadBalancer Services
@@ -205,6 +205,11 @@ type VirtualServerNetwork struct {
 	// A Service will be dynamically created and linked to the VirtualServer
 	// A maximum of 10 ports may be defined
 	UDP VirtualServerServiceTemplate `json:"udp,omitempty"`
+	// If Public is true a public IP will be assigned to the created Services
+	// Defaults to true
+	// +optional
+	// +kubebuilder:default=true
+	Public bool `json:"public"`
 }
 
 // VirtualServerServiceTemplate defines a service created by the VirtualServer
@@ -213,11 +218,6 @@ type VirtualServerServiceTemplate struct {
 	// The list is constrained to a maximum of 10 ports
 	// +kubebuilder:validation:MaxItems=10
 	Ports []Port `json:"ports,omitempty"`
-	// If Public is true a public IP will be assigned to the service.
-	// Defaults to true
-	// +optional
-	// +kubebuilder:default=true
-	Public bool `json:"public"`
 }
 
 // +kubebuilder:validation:Minimum=1

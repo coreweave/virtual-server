@@ -199,12 +199,8 @@ func (vs *VirtualServer) ExposeTCPPorts(ports []int32) error {
 	return nil
 }
 
-func (vs *VirtualServer) EnableTCPPublicIP(enable bool) {
-	vs.Spec.Network.TCP.Public = enable
-}
-
-func (vs *VirtualServer) EnableUDPPublicIP(enable bool) {
-	vs.Spec.Network.TCP.Public = enable
+func (vs *VirtualServer) EnablePublicIP(enable bool) {
+	vs.Spec.Network.Public = enable
 }
 
 // Expose a UDP port on the VirtualServer

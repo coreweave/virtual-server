@@ -56,8 +56,8 @@ func Example_create() {
 	}
 	// Expose tcp ports 22 and 443 on the VirtualServer
 	virtualServer.ExposeTCPPorts([]int32{22, 443})
-	// Enable a public IP for the TCP service
-	virtualServer.EnableTCPPublicIP(true)
+	// Enable a public IP services
+	virtualServer.EnablePublicIP(true)
 	// Expose a single udp port 4172 on the VirtualServer
 	virtualServer.ExposeUDPPort(4172)
 	// Set the VirtualServer to start as soon as it is created
