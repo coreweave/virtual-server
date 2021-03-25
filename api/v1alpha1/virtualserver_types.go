@@ -35,7 +35,8 @@ type VirtualServerSpec struct {
 	OS        VirtualServerOS        `json:"os"`
 	Resources VirtualServerResources `json:"resources"`
 	Storage   VirtualServerStorage   `json:"storage"`
-	Users     []VirtualServerUser    `json:"users"`
+	// +optional
+	Users []VirtualServerUser `json:"users,omitempty"`
 	// +optional
 	Network VirtualServerNetwork `json:"network"`
 	// +optional
@@ -54,6 +55,8 @@ type VirtualServerStatus struct {
 // +kubebuilder:printcolumn:JSONPath=".status.conditions[0].reason",name=status,type=string
 // +kubebuilder:printcolumn:JSONPath=".status.conditions[0].message",name=reason,type=string
 // +kubebuilder:printcolumn:JSONPath=".status.conditions[3].status",name=started,type=string
+// +kubebuilder:printcolumn:JSONPath=".status.network.internalIP",name=Internal IP,type=string
+// +kubebuilder:printcolumn:JSONPath=".status.network.externalIP",name=External IP,type=string
 
 // VirtualServer is the Schema for the virtualservers API.
 // It allows for configuring a Virtual Server instance on the Coreweave Cloud kubernetes platform.
@@ -174,6 +177,10 @@ type VirtualServerStorageRoot struct {
 	// +kubebuilder:default=ReadWriteOnce
 	// +optional
 	AccessMode corev1.PersistentVolumeAccessMode `json:"accessMode,omitempty"`
+	// Ephemeral, if true, will disable disk persistence for the root filesystem.
+	// A local image will be used to write changes, and will be discared when the Virtual Server is stopped or restarted.
+	// Only a PVC source may be specified
+	Ephemeral bool `json:"ephemeral,omitempty"`
 }
 
 // VirtualServerStorageVolume describes a named volume in the VirtualServer
@@ -232,8 +239,7 @@ type VirtualServerFloatingIP struct {
 
 type VirtualServerNetworkStatus struct {
 	InternalIP  *string           `json:"internalIP,omitempty"`
-	TCP         *string           `json:"tcpIP,omitempty"`
-	UDP         *string           `json:"udpIP,omitempty"`
+	ExternalIP  *string           `json:"externalIP,omitempty"`
 	FloatingIPs map[string]string `json:"floatingIPs,omitempty"`
 }
 

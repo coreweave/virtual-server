@@ -429,16 +429,9 @@ func (s *VirtualServerStatus) InternalIP() string {
 	return ""
 }
 
-func (s *VirtualServerStatus) TCP() string {
+func (s *VirtualServerStatus) ExternalIP() string {
 	if s.Network.InternalIP != nil {
-		return *s.Network.TCP
-	}
-	return ""
-}
-
-func (s *VirtualServerStatus) UDP() string {
-	if s.Network.InternalIP != nil {
-		return *s.Network.UDP
+		return *s.Network.ExternalIP
 	}
 	return ""
 }

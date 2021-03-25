@@ -29,6 +29,12 @@ spec:
     - jsonPath: .status.conditions[3].status
       name: started
       type: string
+    - jsonPath: .status.network.internalIP
+      name: Internal IP
+      type: string
+    - jsonPath: .status.network.externalIP
+      name: External IP
+      type: string
     name: v1alpha1
     schema:
       openAPIV3Schema:
@@ -1532,6 +1538,12 @@ spec:
                         description: AccessMode specifies the AccessMode of the root
                           filesystem PVC. Defaults to ReadWriteOnce
                         type: string
+                      ephemeral:
+                        description: Ephemeral, if true, will disable disk persistence
+                          for the root filesystem. A local image will be used to write
+                          changes, and will be discared when the Virtual Server is
+                          stopped or restarted. Only a PVC source may be specified
+                        type: boolean
                       size:
                         anyOf:
                         - type: integer
@@ -1715,7 +1727,6 @@ spec:
             - os
             - resources
             - storage
-            - users
             type: object
           status:
             description: VirtualServerStatus defines the observed state of VirtualServer
@@ -1791,15 +1802,13 @@ spec:
                 type: array
               network:
                 properties:
+                  externalIP:
+                    type: string
                   floatingIPs:
                     additionalProperties:
                       type: string
                     type: object
                   internalIP:
-                    type: string
-                  tcpIP:
-                    type: string
-                  udpIP:
                     type: string
                 type: object
             type: object

@@ -128,12 +128,11 @@ func Example_getStatus() {
 	fmt.Printf(`
 		Network:
 			InternalIP: %s
-			TCP: %s
-			UDP: %s
+			ExternalIP: %s
 	`,
 		virtualServer.Status.InternalIP(),
-		virtualServer.Status.TCP(),
-		virtualServer.Status.UDP())
+		virtualServer.Status.ExternalIP(),
+	)
 
 	// output:
 	// Status: "True" or "False"

@@ -130,13 +130,8 @@ func (in *VirtualServerNetworkStatus) DeepCopyInto(out *VirtualServerNetworkStat
 		*out = new(string)
 		**out = **in
 	}
-	if in.TCP != nil {
-		in, out := &in.TCP, &out.TCP
-		*out = new(string)
-		**out = **in
-	}
-	if in.UDP != nil {
-		in, out := &in.UDP, &out.UDP
+	if in.ExternalIP != nil {
+		in, out := &in.ExternalIP, &out.ExternalIP
 		*out = new(string)
 		**out = **in
 	}
