@@ -152,7 +152,7 @@ type VirtualServerStorage struct {
 	// AdditionalDisks is an array of disks devices added to the VirtualServer
 	AdditionalDisks []VirtualServerStorageVolume `json:"additionalDisks,omitempty"`
 	// Filesystems is an array of filesystem mounted to the VirtualServer
-	FileSystems []VirtualServerStorageVolume `json:"filesystems,omitempty"`
+	FileSystems []VirtualServerFilesystem `json:"filesystems,omitempty"`
 	// Swap describes a swap volume of the specified size added to the VirtualServer
 	// An emptyDisk is created of the specified size to be used as the swap disk
 	Swap *resource.Quantity `json:"swap,omitempty"`
@@ -187,6 +187,12 @@ type VirtualServerStorageRoot struct {
 type VirtualServerStorageVolume struct {
 	Name string            `json:"name"`
 	Spec kvv1.VolumeSource `json:"spec"`
+}
+
+type VirtualServerFilesystem struct {
+	VirtualServerStorageVolume `json:",inline"`
+	// +optional
+	Mountpoint *string `json:"mountPoint,omitempty"`
 }
 
 // VirtualServerUser defines user login information in the VirtualServer

@@ -1164,9 +1164,9 @@ spec:
                     description: Filesystems is an array of filesystem mounted to
                       the VirtualServer
                     items:
-                      description: VirtualServerStorageVolume describes a named volume
-                        in the VirtualServer
                       properties:
+                        mountPoint:
+                          type: string
                         name:
                           type: string
                         spec:

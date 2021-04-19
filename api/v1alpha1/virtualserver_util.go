@@ -380,10 +380,12 @@ func (vs *VirtualServer) AddPVCFileSystem(name string, pvcName string, readOnly 
 		ClaimName: pvcName,
 		ReadOnly:  readOnly,
 	}
-	fs := VirtualServerStorageVolume{
-		Name: name,
-		Spec: kvv1.VolumeSource{
-			PersistentVolumeClaim: &pvcSource,
+	fs := VirtualServerFilesystem{
+		VirtualServerStorageVolume: VirtualServerStorageVolume{
+			Name: name,
+			Spec: kvv1.VolumeSource{
+				PersistentVolumeClaim: &pvcSource,
+			},
 		},
 	}
 
@@ -394,7 +396,7 @@ func (vs *VirtualServer) AddPVCFileSystem(name string, pvcName string, readOnly 
 		}
 	}
 
-	vs.Spec.Storage.FileSystems = append(vs.Spec.Storage.AdditionalDisks, fs)
+	vs.Spec.Storage.FileSystems = append(vs.Spec.Storage.FileSystems, fs)
 }
 
 func (vs *VirtualServer) AddSwap(size string) error {
