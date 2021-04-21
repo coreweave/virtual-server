@@ -36,6 +36,10 @@ type VirtualServerSpec struct {
 	Resources VirtualServerResources `json:"resources"`
 	Storage   VirtualServerStorage   `json:"storage"`
 	// +optional
+	LivenessProbe *kvv1.Probe `json:"livenessProbe,omitempty"`
+	// +optional
+	ReadinessProbe *kvv1.Probe `json:"readinessProbe,omitempty"`
+	// +optional
 	Users []VirtualServerUser `json:"users,omitempty"`
 	// +optional
 	Network VirtualServerNetwork `json:"network"`
