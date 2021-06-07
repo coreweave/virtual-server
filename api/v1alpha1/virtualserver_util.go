@@ -432,7 +432,7 @@ func (s *VirtualServerStatus) InternalIP() string {
 }
 
 func (s *VirtualServerStatus) ExternalIP() string {
-	if s.Network.InternalIP != nil {
+	if s.Network.ExternalIP != nil {
 		return *s.Network.ExternalIP
 	}
 	return ""
