@@ -119,6 +119,10 @@ func (vs *VirtualServer) SetOS(os VirtualServerOSType) {
 	}
 }
 
+func (vs *VirtualServer) EnableUEFIBoot(enable bool) {
+	vs.Spec.OS.EnableUEFIBoot = enable
+}
+
 // Set the VirtualServer resource definition
 func (vs *VirtualServer) SetResourceDefinition(definitionVersion string) {
 	vs.Spec.Resources.Definition = definitionVersion

@@ -100,6 +100,9 @@ type VirtualServerOS struct {
 	// +optional
 	// +kubebuilder:default=a
 	Definition string `json:"definition,omitempty"`
+	// Configure the Virtual Server use a UEFI bootloader
+	// +optional
+	EnableUEFIBoot bool `json:"enableUEFIBoot,omitempty"`
 }
 
 // VirtualServerResources defines the resources requested for the VirtualServer

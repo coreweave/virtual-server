@@ -821,6 +821,9 @@ spec:
                       for details on which definition value best suits your configuration.
                       Defaults to "a"
                     type: string
+                  enableUEFIBoot:
+                    description: Configure the Virtual Server use a UEFI bootloader
+                    type: boolean
                   type:
                     description: The Operating System run in the Virtual Server VirtualServerOSType
                       may be "windows" or "linux"
