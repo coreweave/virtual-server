@@ -649,6 +649,8 @@ spec:
                         type: array
                     type: object
                 type: object
+              cloudInit:
+                type: string
               initializeRunning:
                 type: boolean
               livenessProbe:

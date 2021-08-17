@@ -1,8 +1,10 @@
 package v1alpha1
 
 import (
+	"errors"
 	"fmt"
 
+	"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -180,6 +182,29 @@ func (vs *VirtualServer) AddUser(user VirtualServerUser) {
 		}
 	}
 	vs.Spec.Users = append(vs.Spec.Users, user)
+}
+
+//Add custom CloudInit attribute to VirtualServer
+func (vs *VirtualServer) AddCloudInit(cloudInit string) error {
+	// Current size of the VS' script is about 250 characeters
+	var totalUsersSize int = 0
+	for i := range vs.Spec.Users {
+		totalUsersSize += vs.Spec.Users[i].GetSize()
+	}
+	MaxCustomCloudInitLength := corev1.MaxSecretSize - totalUsersSize
+
+	if len(cloudInit) <= MaxCustomCloudInitLength {
+		vs.Spec.CloudInit = cloudInit
+		return nil
+	}
+	msg := fmt.Sprintf("Cloud-init script must be %d characters length or less", MaxCustomCloudInitLength)
+	return errors.New(msg)
+}
+
+func (vs *VirtualServer) IsValidCloudInit() error {
+	var cloudInit map[string]interface{}
+	cloudInitStr := vs.Spec.CloudInit
+	return yaml.Unmarshal([]byte(cloudInitStr), &cloudInit)
 }
 
 // Set whether the VirtualServer will automatically start upon creation

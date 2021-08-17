@@ -45,6 +45,8 @@ type VirtualServerSpec struct {
 	Network VirtualServerNetwork `json:"network"`
 	// +optional
 	InitializeRunning bool `json:"initializeRunning,omitempty"`
+	// +optional
+	CloudInit string `json:"cloudInit,omitempty"`
 }
 
 // VirtualServerStatus defines the observed state of VirtualServer
@@ -209,6 +211,14 @@ type VirtualServerUser struct {
 	Password string `json:"password,omitempty"`
 }
 
+// GetSize returns total size of fields in VirtualServerUser struct
+func (vsu *VirtualServerUser) GetSize() int {
+	var totalSize int = 0
+	totalSize += len(vsu.Username)
+	totalSize += len(vsu.Password)
+	return totalSize
+}
+
 // VirtualServerNetwork defines the network configuration of the VirtualServer
 type VirtualServerNetwork struct {
 	// If enabled, a Service will be dynamically created, and its IP directly attached to the VirtualServer
@@ -276,6 +286,8 @@ const (
 	VSConditionTypeServicesReady VirtualServerConditionType = "ServicesReady"
 	// VSConditionTypeVMReady describes the ready state of the underlying VirtualMachine
 	VSConditionTypeVMReady VirtualServerConditionType = "VirtualMachineReady"
+	// VSConditionTypeServicesReady describes the ready state of the services dynamically created and/or those required by the VirtualServer
+	VSConditionTypeSecretReady VirtualServerConditionType = "SecretReady"
 )
 
 type VirtualServerConditionReason string
@@ -307,4 +319,8 @@ const (
 	VSConditionReasonVMNameTaken VirtualServerConditionReason = "VirtualMachineNameTaken"
 	// VSConditionReasonVMReady indicates that the underlying VirtualMachine is ready
 	VSConditionReasonVMReady VirtualServerConditionReason = "VirtualMachineReady"
+	// VSConditionReasonSecretCreated indicates that the VirtualServer secret have been successfully created
+	VSConditionReasonSecretCreated VirtualServerConditionReason = "SecretCreated"
+	// VSConditionReasonWaitingForSecret indicates that the VirtualServer is waiting for the required secret to be ready
+	VSConditionReasonWaitingForSecrets VirtualServerConditionReason = "WaitingForSecret"
 )
