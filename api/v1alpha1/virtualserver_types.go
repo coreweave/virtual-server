@@ -207,8 +207,9 @@ type VirtualServerFilesystem struct {
 // VirtualServerUser defines user login information in the VirtualServer
 // The user login information will be used to configure the VirtualServer via cloudinit if supported
 type VirtualServerUser struct {
-	Username string `json:"username"`
-	Password string `json:"password,omitempty"`
+	Username     string `json:"username"`
+	Password     string `json:"password,omitempty"`
+	SSHPublicKey string `json:"sshpublickey,omitempty"`
 }
 
 // GetSize returns total size of fields in VirtualServerUser struct

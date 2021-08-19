@@ -178,6 +178,7 @@ func (vs *VirtualServer) AddUser(user VirtualServerUser) {
 	for _, u := range vs.Spec.Users {
 		if u.Username == user.Username {
 			u.Password = user.Password
+			u.SSHPublicKey = user.SSHPublicKey
 			return
 		}
 	}
