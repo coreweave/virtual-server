@@ -157,6 +157,11 @@ func (in *VirtualServerNetworkStatus) DeepCopyInto(out *VirtualServerNetworkStat
 		*out = new(string)
 		**out = **in
 	}
+	if in.ServiceIP != nil {
+		in, out := &in.ServiceIP, &out.ServiceIP
+		*out = new(string)
+		**out = **in
+	}
 	if in.FloatingIPs != nil {
 		in, out := &in.FloatingIPs, &out.FloatingIPs
 		*out = make(map[string]string, len(*in))

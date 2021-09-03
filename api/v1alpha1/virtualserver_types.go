@@ -264,6 +264,7 @@ type VirtualServerFloatingIP struct {
 type VirtualServerNetworkStatus struct {
 	InternalIP  *string           `json:"internalIP,omitempty"`
 	ExternalIP  *string           `json:"externalIP,omitempty"`
+	ServiceIP   *string           `json:"serviceIP,omitempty"`
 	FloatingIPs map[string]string `json:"floatingIPs,omitempty"`
 }
 

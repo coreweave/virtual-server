@@ -2011,6 +2011,8 @@ spec:
                     type: object
                   internalIP:
                     type: string
+                  serviceIP:
+                    type: string
                 type: object
             type: object
         type: object

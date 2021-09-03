@@ -11,12 +11,11 @@ require (
 	golang.org/x/tools v0.0.0-20200725200936-102e7d357031 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/api v0.20.1
-	k8s.io/apiextensions-apiserver v0.19.6 // indirect
-	k8s.io/apimachinery v0.20.1
+	k8s.io/api v0.20.2
+	k8s.io/apimachinery v0.20.2
 	kubevirt.io/client-go v0.36.0
 	kubevirt.io/containerized-data-importer v1.26.1
-	sigs.k8s.io/controller-runtime v0.7.1
+	sigs.k8s.io/controller-runtime v0.8.3
 )
 
 replace (
