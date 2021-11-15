@@ -213,6 +213,10 @@ func (vs *VirtualServer) InitializeRunning(initRunning bool) {
 	vs.Spec.InitializeRunning = initRunning
 }
 
+func (vs *VirtualServer) RunStrategy(runStrategy kvv1.VirtualMachineRunStrategy) {
+	vs.Spec.RunStrategy = &runStrategy
+}
+
 // Expose a TCP port on the VirtualServer
 func (vs *VirtualServer) ExposeTCPPort(port int32) error {
 	return vs.exposePort(port, corev1.ProtocolTCP)

@@ -47,6 +47,8 @@ type VirtualServerSpec struct {
 	InitializeRunning bool `json:"initializeRunning,omitempty"`
 	// +optional
 	CloudInit string `json:"cloudInit,omitempty"`
+	// +kubebuilder:validation:Enum=Always;RerunOnFailure;Manual;Halted
+	RunStrategy *kvv1.VirtualMachineRunStrategy `json:"runStrategy,omitempty"`
 }
 
 // VirtualServerStatus defines the observed state of VirtualServer
@@ -309,6 +311,8 @@ const (
 	VSConditionReasonStarted VirtualServerConditionReason = "VirtualServerStarted"
 	// VSConditionReasonStopped indicates that the VirtualServer been stopped
 	VSConditionReasonStopped VirtualServerConditionReason = "VirtualServerStopped"
+	// VSConditionReasonVMIShutdown indicates that the Virtual Machine Instance has been shut down
+	VSConditionReasonVMIShutdown VirtualServerConditionReason = "VirtualMachineInstanceShutdown"
 	// VSConditionReasonDefinitionDepricated indicates that the definition used to configure the VirtualServer has been depricated and a manual update is required
 	VSConditionReasonDefinitionDepricated VirtualServerConditionReason = "DefinitionDepricated"
 	// VSConditionReasonServicesCreated indicates that the VirtualServer services have been successfully created

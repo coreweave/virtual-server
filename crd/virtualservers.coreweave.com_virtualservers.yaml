@@ -985,6 +985,15 @@ spec:
                     pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                     x-kubernetes-int-or-string: true
                 type: object
+              runStrategy:
+                description: VirtualMachineRunStrategy is a label for the requested
+                  VirtualMachineInstance Running State at the current time.
+                enum:
+                - Always
+                - RerunOnFailure
+                - Manual
+                - Halted
+                type: string
               storage:
                 description: VirtualServerStorage describes the Storage request for
                   the VirtualServer
