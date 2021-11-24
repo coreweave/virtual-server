@@ -208,6 +208,14 @@ func (vs *VirtualServer) IsValidCloudInit() error {
 	return yaml.Unmarshal([]byte(cloudInitStr), &cloudInit)
 }
 
+func (vs *VirtualServer) AddDNSConfig(dnsConfig *corev1.PodDNSConfig) {
+	vs.Spec.Network.DNSConfig = dnsConfig
+}
+
+func (vs *VirtualServer) AddDNSPolicy(dnsPolicy *corev1.DNSPolicy) {
+	vs.Spec.Network.DNSPolicy = dnsPolicy
+}
+
 // Set whether the VirtualServer will automatically start upon creation
 func (vs *VirtualServer) InitializeRunning(initRunning bool) {
 	vs.Spec.InitializeRunning = initRunning

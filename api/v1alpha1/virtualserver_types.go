@@ -243,6 +243,14 @@ type VirtualServerNetwork struct {
 	// +optional
 	// +kubebuilder:default=true
 	Public bool `json:"public"`
+	// DNSConfig defines the DNS parameters of a VMI in addition to those generated from DNSPolicy.
+	// +optional
+	DNSConfig *corev1.PodDNSConfig `json:"dnsConfig,omitempty"`
+	// Set DNS policy for the VMI. Defaults to "ClusterFirst".
+	// Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+	// +optional
+	// +kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None
+	DNSPolicy *corev1.DNSPolicy `json:"dnsPolicy,omitempty"`
 }
 
 // VirtualServerServiceTemplate defines a service created by the VirtualServer

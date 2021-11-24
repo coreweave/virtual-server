@@ -759,6 +759,51 @@ spec:
                       and its IP directly attached to the VirtualServer DirectAttachLoadBalancerIP
                       may not be set if UDP or TCP VirtualServerPorts are defined
                     type: boolean
+                  dnsConfig:
+                    description: DNSConfig defines the DNS parameters of a VMI in
+                      addition to those generated from DNSPolicy.
+                    properties:
+                      nameservers:
+                        description: A list of DNS name server IP addresses. This
+                          will be appended to the base nameservers generated from
+                          DNSPolicy. Duplicated nameservers will be removed.
+                        items:
+                          type: string
+                        type: array
+                      options:
+                        description: A list of DNS resolver options. This will be
+                          merged with the base options generated from DNSPolicy. Duplicated
+                          entries will be removed. Resolution options given in Options
+                          will override those that appear in the base DNSPolicy.
+                        items:
+                          description: PodDNSConfigOption defines DNS resolver options
+                            of a pod.
+                          properties:
+                            name:
+                              description: Required.
+                              type: string
+                            value:
+                              type: string
+                          type: object
+                        type: array
+                      searches:
+                        description: A list of DNS search domains for host-name lookup.
+                          This will be appended to the base search paths generated
+                          from DNSPolicy. Duplicated search paths will be removed.
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  dnsPolicy:
+                    description: Set DNS policy for the VMI. Defaults to "ClusterFirst".
+                      Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',
+                      'Default' or 'None'.
+                    enum:
+                    - ClusterFirstWithHostNet
+                    - ClusterFirst
+                    - Default
+                    - None
+                    type: string
                   floatingIPs:
                     description: FloatingIPs is an array of LoadBalancer Services
                       The Services LoadBalancer IPs will be used for the floating
