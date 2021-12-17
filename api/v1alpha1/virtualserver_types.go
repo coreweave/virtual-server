@@ -337,4 +337,6 @@ const (
 	VSConditionReasonSecretCreated VirtualServerConditionReason = "SecretCreated"
 	// VSConditionReasonWaitingForSecret indicates that the VirtualServer is waiting for the required secret to be ready
 	VSConditionReasonWaitingForSecrets VirtualServerConditionReason = "WaitingForSecret"
+	// VSConditionReasonResizeInProgress indicates that the VirtualServer root disk is being resized
+	VSConditionReasonResizeInProgress VirtualServerConditionReason = "RootDiskResizeinProgress"
 )
