@@ -820,6 +820,11 @@ spec:
                       - serviceName
                       type: object
                     type: array
+                  macAddress:
+                    description: Set MAC address for the VMI. It must be a local unicast
+                      type.
+                    pattern: ^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$
+                    type: string
                   public:
                     default: true
                     description: If Public is true a public IP will be assigned to

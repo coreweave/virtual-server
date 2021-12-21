@@ -251,6 +251,10 @@ type VirtualServerNetwork struct {
 	// +optional
 	// +kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None
 	DNSPolicy *corev1.DNSPolicy `json:"dnsPolicy,omitempty"`
+	// Set MAC address for the VMI. It must be a local unicast type.
+	// +optional
+	// +kubebuilder:validation:Pattern="^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$"
+	MACAddress string `json:"macAddress,omitempty"`
 }
 
 // VirtualServerServiceTemplate defines a service created by the VirtualServer

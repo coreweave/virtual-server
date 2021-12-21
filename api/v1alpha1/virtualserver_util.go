@@ -3,6 +3,7 @@ package v1alpha1
 import (
 	"errors"
 	"fmt"
+	"regexp"
 
 	"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
@@ -12,6 +13,8 @@ import (
 	kvv1 "kubevirt.io/client-go/api/v1"
 	cdiv1alpha "kubevirt.io/containerized-data-importer/pkg/apis/core/v1alpha1"
 )
+
+const MacAddressRegEx = `^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$`
 
 // IsGpuServer returns true if the VirtualServer is GPU enabled
 func (vs *VirtualServer) IsGpuServer() bool {
@@ -214,6 +217,18 @@ func (vs *VirtualServer) AddDNSConfig(dnsConfig *corev1.PodDNSConfig) {
 
 func (vs *VirtualServer) AddDNSPolicy(dnsPolicy *corev1.DNSPolicy) {
 	vs.Spec.Network.DNSPolicy = dnsPolicy
+}
+
+func (vs *VirtualServer) SetMacAddress(macAddress string) error {
+	matched, err := regexp.MatchString(MacAddressRegEx, macAddress)
+	if err != nil {
+		return err
+	}
+	if !matched {
+		return fmt.Errorf("Invalid format of MAC address, it must be ff:ff:ff:ff:ff:ff or FF-FF-FF-FF-FF-FF")
+	}
+	vs.Spec.Network.MACAddress = macAddress
+	return nil
 }
 
 // Set whether the VirtualServer will automatically start upon creation
