@@ -10,11 +10,13 @@ import (
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	kvv1 "kubevirt.io/client-go/api/v1"
 	cdiv1alpha "kubevirt.io/containerized-data-importer/pkg/apis/core/v1alpha1"
 )
 
 const MacAddressRegEx = `^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$`
+const FirmwareSerialRegEx = `^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`
 
 // IsGpuServer returns true if the VirtualServer is GPU enabled
 func (vs *VirtualServer) IsGpuServer() bool {
@@ -225,9 +227,26 @@ func (vs *VirtualServer) SetMacAddress(macAddress string) error {
 		return err
 	}
 	if !matched {
-		return fmt.Errorf("Invalid format of MAC address, it must be ff:ff:ff:ff:ff:ff or FF-FF-FF-FF-FF-FF")
+		return fmt.Errorf("invalid format of MAC address, it must be ff:ff:ff:ff:ff:ff or FF-FF-FF-FF-FF-FF")
 	}
 	vs.Spec.Network.MACAddress = macAddress
+	return nil
+}
+
+func (vs *VirtualServer) SetFirmwareSerial(serial string) error {
+	matched, err := regexp.MatchString(FirmwareSerialRegEx, serial)
+	if err != nil {
+		return err
+	}
+	if !matched {
+		return fmt.Errorf("invalid format of firmware serial, it must be ffffffff-ffff-ffff-ffff-ffff-ffffffffffff")
+	}
+	vs.Spec.Firmware.Serial = serial
+	return nil
+}
+
+func (vs *VirtualServer) SetFirmwareUUID(uuid types.UID) error {
+	vs.Spec.Firmware.UUID = uuid
 	return nil
 }
 

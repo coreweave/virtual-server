@@ -24,6 +24,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	kvv1 "kubevirt.io/client-go/api/v1"
 	cdiv1alpha "kubevirt.io/containerized-data-importer/pkg/apis/core/v1alpha1"
 )
@@ -49,6 +50,18 @@ type VirtualServerSpec struct {
 	CloudInit string `json:"cloudInit,omitempty"`
 	// +kubebuilder:validation:Enum=Always;RerunOnFailure;Manual;Halted
 	RunStrategy *kvv1.VirtualMachineRunStrategy `json:"runStrategy,omitempty"`
+	// +optional
+	Firmware Firmware `json:"firmware,omitempty"`
+}
+
+type Firmware struct {
+	// UUID reported by the vmi bios.
+	// Defaults to a random generated uid.
+	// +optional
+	UUID types.UID `json:"uuid,omitempty"`
+	// The system-serial-number in SMBIOS
+	// +optional
+	Serial string `json:"serial,omitempty"`
 }
 
 // VirtualServerStatus defines the observed state of VirtualServer

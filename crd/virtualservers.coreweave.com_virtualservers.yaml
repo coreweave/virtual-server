@@ -651,6 +651,16 @@ spec:
                 type: object
               cloudInit:
                 type: string
+              firmware:
+                properties:
+                  serial:
+                    description: The system-serial-number in SMBIOS
+                    type: string
+                  uuid:
+                    description: UUID reported by the vmi bios. Defaults to a random
+                      generated uid.
+                    type: string
+                type: object
               initializeRunning:
                 type: boolean
               livenessProbe:
