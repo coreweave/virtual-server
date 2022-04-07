@@ -259,6 +259,14 @@ func (vs *VirtualServer) RunStrategy(runStrategy kvv1.VirtualMachineRunStrategy)
 	vs.Spec.RunStrategy = &runStrategy
 }
 
+func (vs *VirtualServer) UseVirtioTransitional(useVirtioTransitional bool) {
+	vs.Spec.UseVirtioTransitional = &useVirtioTransitional
+}
+
+func (vs *VirtualServer) TerminationGracePeriodSeconds(seconds int64) {
+	vs.Spec.TerminationGracePeriodSeconds = &seconds
+}
+
 // Expose a TCP port on the VirtualServer
 func (vs *VirtualServer) ExposeTCPPort(port int32) error {
 	return vs.exposePort(port, corev1.ProtocolTCP)
@@ -328,12 +336,12 @@ func (vs *VirtualServer) DirectAttachLoadBalancerIP(attach bool) {
 // The loadbalancer IP will be extracted from an existing loadbalancer service with the provided name
 func (vs *VirtualServer) AddFloatingIP(loadBalancerServiceName string) {
 	for _, flIP := range vs.Spec.Network.FloatingIPs {
-		if flIP.SericeName == loadBalancerServiceName {
+		if flIP.ServiceName == loadBalancerServiceName {
 			return
 		}
 	}
 	vs.Spec.Network.FloatingIPs = append(vs.Spec.Network.FloatingIPs, VirtualServerFloatingIP{
-		SericeName: loadBalancerServiceName,
+		ServiceName: loadBalancerServiceName,
 	})
 }
 

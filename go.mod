@@ -13,7 +13,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.20.2
 	k8s.io/apimachinery v0.20.2
-	kubevirt.io/client-go v0.36.0
+	kubevirt.io/client-go v0.36.1
 	kubevirt.io/containerized-data-importer v1.26.1
 	sigs.k8s.io/controller-runtime v0.8.3
 )

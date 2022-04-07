@@ -52,6 +52,9 @@ type VirtualServerSpec struct {
 	RunStrategy *kvv1.VirtualMachineRunStrategy `json:"runStrategy,omitempty"`
 	// +optional
 	Firmware Firmware `json:"firmware,omitempty"`
+	// +optional
+	UseVirtioTransitional         *bool  `json:"useVirtioTransitional,omitempty"`
+	TerminationGracePeriodSeconds *int64 `json:"terminationGracePeriodSeconds,omitempty"`
 }
 
 type Firmware struct {
@@ -285,7 +288,7 @@ type Port int32
 // VirtualServerFloatingIP represents a source that will be used for a VirtualServer floating IP
 type VirtualServerFloatingIP struct {
 	// The name of an existing LoadBalancer Service to use as the Floating IP source
-	SericeName string `json:"serviceName"`
+	ServiceName string `json:"serviceName"`
 }
 
 type VirtualServerNetworkStatus struct {

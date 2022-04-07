@@ -1977,6 +1977,11 @@ spec:
                 required:
                 - root
                 type: object
+              terminationGracePeriodSeconds:
+                format: int64
+                type: integer
+              useVirtioTransitional:
+                type: boolean
               users:
                 items:
                   description: VirtualServerUser defines user login information in
