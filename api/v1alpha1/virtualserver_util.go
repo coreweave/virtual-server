@@ -180,10 +180,10 @@ func (vs *VirtualServer) SetMemory(memory string) error {
 // Add a user to the VirtualServer
 // The user will be used to configure the VirtualServer via cloudinit if supported
 func (vs *VirtualServer) AddUser(user VirtualServerUser) {
-	for _, u := range vs.Spec.Users {
+	for i, u := range vs.Spec.Users {
 		if u.Username == user.Username {
-			u.Password = user.Password
-			u.SSHPublicKey = user.SSHPublicKey
+			vs.Spec.Users[i].Password = user.Password
+			vs.Spec.Users[i].SSHPublicKey = user.SSHPublicKey
 			return
 		}
 	}
@@ -253,6 +253,10 @@ func (vs *VirtualServer) SetFirmwareUUID(uuid types.UID) error {
 // Set whether the VirtualServer will automatically start upon creation
 func (vs *VirtualServer) InitializeRunning(initRunning bool) {
 	vs.Spec.InitializeRunning = initRunning
+}
+
+func (vs *VirtualServer) SetHeadless(headless bool) {
+	vs.Spec.Network.Headless = headless
 }
 
 func (vs *VirtualServer) RunStrategy(runStrategy kvv1.VirtualMachineRunStrategy) {

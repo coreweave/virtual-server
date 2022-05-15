@@ -165,9 +165,7 @@ type VirtualServerResourceGPU struct {
 	// See Coreweave Metadata API for available GPU types
 	Type *string `json:"type,omitempty"`
 	// The number of GPUs to request.
-	// Defaults to 1
 	// +optional
-	// +kubebuilder:default=1
 	// +kubebuilder:validation:Minimum=1
 	Count *uint32 `json:"count,omitempty"`
 }
@@ -271,6 +269,10 @@ type VirtualServerNetwork struct {
 	// +optional
 	// +kubebuilder:validation:Pattern="^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$"
 	MACAddress string `json:"macAddress,omitempty"`
+	// When DirectAttachLoadBalancerIP is false or no ports are specified, create a headless service. Defaults to true.
+	// +optional
+	// +kubebuilder:default=true
+	Headless bool `json:"headless,omitempty"`
 }
 
 // VirtualServerServiceTemplate defines a service created by the VirtualServer
@@ -325,7 +327,7 @@ const (
 type VirtualServerConditionReason string
 
 const (
-	// VSConditionReasonInitializing indicates that the VirtualServer is initilizing for the first time
+	// VSConditionReasonInitializing indicates that the VirtualServer is initializing for the first time
 	VSConditionReasonInitializing VirtualServerConditionReason = "Initializing"
 	// VSConditionReasonPending indicates that the VirtualServer is pending an update to its spec
 	VSConditionReasonPending VirtualServerConditionReason = "Pending"
@@ -341,8 +343,8 @@ const (
 	VSConditionReasonStopped VirtualServerConditionReason = "VirtualServerStopped"
 	// VSConditionReasonVMIShutdown indicates that the Virtual Machine Instance has been shut down
 	VSConditionReasonVMIShutdown VirtualServerConditionReason = "VirtualMachineInstanceShutdown"
-	// VSConditionReasonDefinitionDepricated indicates that the definition used to configure the VirtualServer has been depricated and a manual update is required
-	VSConditionReasonDefinitionDepricated VirtualServerConditionReason = "DefinitionDepricated"
+	// VSConditionReasonDefinitionDeprecated indicates that the definition used to configure the VirtualServer has been deprecated and a manual update is required
+	VSConditionReasonDefinitionDeprecated VirtualServerConditionReason = "DefinitionDeprecated"
 	// VSConditionReasonServicesCreated indicates that the VirtualServer services have been successfully created
 	VSConditionReasonServicesCreated VirtualServerConditionReason = "ServicesCreated"
 	// VSConditionReasonWaitingForServices indicates that the VirtualServer is waiting for the required services to be ready

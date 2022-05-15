@@ -830,6 +830,11 @@ spec:
                       - serviceName
                       type: object
                     type: array
+                  headless:
+                    default: true
+                    description: When DirectAttachLoadBalancerIP is false or no ports
+                      are specified, create a headless service. Defaults to true.
+                    type: boolean
                   macAddress:
                     description: Set MAC address for the VMI. It must be a local unicast
                       type.
@@ -1026,8 +1031,7 @@ spec:
                     description: GPU describes the GPU resource request
                     properties:
                       count:
-                        default: 1
-                        description: The number of GPUs to request. Defaults to 1
+                        description: The number of GPUs to request.
                         format: int32
                         minimum: 1
                         type: integer
