@@ -769,6 +769,10 @@ spec:
                       and its IP directly attached to the VirtualServer DirectAttachLoadBalancerIP
                       may not be set if UDP or TCP VirtualServerPorts are defined
                     type: boolean
+                  disableK8sNetworking:
+                    description: Disable kubernetes pod network within the Virtual
+                      Server Useful for isolating a Virtual Server in VPC networks
+                    type: boolean
                   dnsConfig:
                     description: DNSConfig defines the DNS parameters of a VMI in
                       addition to those generated from DNSPolicy.
@@ -831,9 +835,9 @@ spec:
                       type: object
                     type: array
                   headless:
-                    default: true
+                    default: false
                     description: When DirectAttachLoadBalancerIP is false or no ports
-                      are specified, create a headless service. Defaults to true.
+                      are specified, create a headless service. Defaults to false.
                     type: boolean
                   macAddress:
                     description: Set MAC address for the VMI. It must be a local unicast
@@ -877,6 +881,18 @@ spec:
                         maxItems: 10
                         type: array
                     type: object
+                  vpcs:
+                    description: List of VPC networks
+                    items:
+                      description: VirtualServerVPC defines a VPC network for the
+                        Virtual Server to join
+                      properties:
+                        name:
+                          type: string
+                      required:
+                      - name
+                      type: object
+                    type: array
                 type: object
               os:
                 description: VirtualServerOS defines the Operating System of the VirtualServer

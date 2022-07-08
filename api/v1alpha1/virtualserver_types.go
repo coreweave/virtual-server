@@ -269,10 +269,21 @@ type VirtualServerNetwork struct {
 	// +optional
 	// +kubebuilder:validation:Pattern="^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$"
 	MACAddress string `json:"macAddress,omitempty"`
-	// When DirectAttachLoadBalancerIP is false or no ports are specified, create a headless service. Defaults to true.
+	// When DirectAttachLoadBalancerIP is false or no ports are specified, create a headless service. Defaults to false.
 	// +optional
-	// +kubebuilder:default=true
+	// +kubebuilder:default=false
 	Headless bool `json:"headless,omitempty"`
+	// List of VPC networks
+	// +optional
+	VPCs []VirtualServerVPC `json:"vpcs,omitempty"`
+	// Disable kubernetes pod network within the Virtual Server
+	// Useful for isolating a Virtual Server in VPC networks
+	DisableK8sNetworking bool `json:"disableK8sNetworking,omitempty"`
+}
+
+// VirtualServerVPC defines a VPC network for the Virtual Server to join
+type VirtualServerVPC struct {
+	Name string `json:"name"`
 }
 
 // VirtualServerServiceTemplate defines a service created by the VirtualServer

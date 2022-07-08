@@ -233,6 +233,10 @@ func (vs *VirtualServer) SetMacAddress(macAddress string) error {
 	return nil
 }
 
+func (vs *VirtualServer) AddVPC(vpcName string) {
+	vs.Spec.Network.VPCs = append(vs.Spec.Network.VPCs, VirtualServerVPC{Name: vpcName})
+}
+
 func (vs *VirtualServer) SetFirmwareSerial(serial string) error {
 	matched, err := regexp.MatchString(FirmwareSerialRegEx, serial)
 	if err != nil {
@@ -437,7 +441,7 @@ func (vs *VirtualServer) AddPVCDisk(name string, pvcName string, readOnly bool) 
 }
 
 // Add an ephemeral EmptyDisk as a disk to the VirtualServer
-func (vs *VirtualServer) AddEmptyDiskDisk(name string, size string) error {
+func (vs *VirtualServer) AddEmptyDisk(name string, size string) error {
 	sz, err := resource.ParseQuantity(size)
 	if err != nil {
 		return fmt.Errorf("Cound not parse size string")
