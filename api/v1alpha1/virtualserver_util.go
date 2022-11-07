@@ -11,8 +11,8 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kvv1 "kubevirt.io/client-go/api/v1"
-	cdiv1alpha "kubevirt.io/containerized-data-importer/pkg/apis/core/v1alpha1"
+	kvv1 "kubevirt.io/api/core/v1"
+	cdiv1beta "kubevirt.io/containerized-data-importer-api/pkg/apis/core/v1beta1"
 )
 
 const MacAddressRegEx = `^[0-9a-f][26ae][:]([0-9a-f]{2}[:]){4}([0-9a-f]{2})|[0-9A-F][26AE][-]([0-9A-F]{2}[-]){4}([0-9A-F]{2})$`
@@ -364,7 +364,7 @@ type VirtualServerStorageRootPVCSource struct {
 
 // Configure the root storage with a PVC as the source
 func (vs *VirtualServer) ConfigureStorageRootWithPVCSource(source VirtualServerStorageRootPVCSource) error {
-	sourcePVC := cdiv1alpha.DataVolumeSourcePVC{
+	sourcePVC := cdiv1beta.DataVolumeSourcePVC{
 		Name:      source.PVCName,
 		Namespace: source.PVCNamespace,
 	}
@@ -376,7 +376,7 @@ func (vs *VirtualServer) ConfigureStorageRootWithPVCSource(source VirtualServerS
 
 	vs.Spec.Storage.Root = VirtualServerStorageRoot{
 		Size: sz,
-		Source: cdiv1alpha.DataVolumeSource{
+		Source: &cdiv1beta.DataVolumeSource{
 			PVC: &sourcePVC,
 		},
 		StorageClassName: source.StorageClassName,
@@ -396,7 +396,7 @@ type VirtualServerStorageRootHTTPSource struct {
 
 // Configure the root storage with a url to an image as the source
 func (vs *VirtualServer) ConfigureStorageRootWithHTTPSource(source VirtualServerStorageRootHTTPSource) error {
-	sourceHTTP := cdiv1alpha.DataVolumeSourceHTTP{
+	sourceHTTP := cdiv1beta.DataVolumeSourceHTTP{
 		URL: source.ImageUrl,
 	}
 
@@ -407,7 +407,7 @@ func (vs *VirtualServer) ConfigureStorageRootWithHTTPSource(source VirtualServer
 
 	vs.Spec.Storage.Root = VirtualServerStorageRoot{
 		Size: sz,
-		Source: cdiv1alpha.DataVolumeSource{
+		Source: &cdiv1beta.DataVolumeSource{
 			HTTP: &sourceHTTP,
 		},
 		StorageClassName: source.StorageClassName,
@@ -426,7 +426,9 @@ func (vs *VirtualServer) AddPVCDisk(name string, pvcName string, readOnly bool) 
 	disk := VirtualServerStorageVolume{
 		Name: name,
 		Spec: kvv1.VolumeSource{
-			PersistentVolumeClaim: &pvcSource,
+			PersistentVolumeClaim: &kvv1.PersistentVolumeClaimVolumeSource{
+				PersistentVolumeClaimVolumeSource: pvcSource,
+			},
 		},
 	}
 
@@ -476,7 +478,9 @@ func (vs *VirtualServer) AddPVCFileSystem(name string, pvcName string, readOnly 
 		VirtualServerStorageVolume: VirtualServerStorageVolume{
 			Name: name,
 			Spec: kvv1.VolumeSource{
-				PersistentVolumeClaim: &pvcSource,
+				PersistentVolumeClaim: &kvv1.PersistentVolumeClaimVolumeSource{
+					PersistentVolumeClaimVolumeSource: pvcSource,
+				},
 			},
 		},
 	}

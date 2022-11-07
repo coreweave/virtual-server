@@ -25,8 +25,8 @@ import (
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kvv1 "kubevirt.io/client-go/api/v1"
-	cdiv1alpha "kubevirt.io/containerized-data-importer/pkg/apis/core/v1alpha1"
+	kvv1 "kubevirt.io/api/core/v1"
+	cdiv1beta "kubevirt.io/containerized-data-importer-api/pkg/apis/core/v1beta1"
 )
 
 // VirtualServerSpec defines the desired state of VirtualServer
@@ -189,7 +189,7 @@ type VirtualServerStorageRoot struct {
 	Size resource.Quantity `json:"size"`
 	// Source describes the DataVolumeSource for the root filesystem DataVolume
 	// A DataVolume will be dynamically created alongside the VirtualServer, and the underlying PVC will be mounted as the root filesystem
-	Source cdiv1alpha.DataVolumeSource `json:"source"`
+	Source *cdiv1beta.DataVolumeSource `json:"source"`
 	// StorageClassName specifies the StorageClassName of the root filesystem PVC
 	StorageClassName string `json:"storageClassName"`
 	// VolumeMode specifies the VolumeMode of the root filesystem PVC.
