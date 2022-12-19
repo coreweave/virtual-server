@@ -423,12 +423,17 @@ func (vs *VirtualServer) AddPVCDisk(name string, pvcName string, readOnly bool) 
 		ClaimName: pvcName,
 		ReadOnly:  readOnly,
 	}
-	disk := VirtualServerStorageVolume{
-		Name: name,
-		Spec: kvv1.VolumeSource{
-			PersistentVolumeClaim: &kvv1.PersistentVolumeClaimVolumeSource{
-				PersistentVolumeClaimVolumeSource: pvcSource,
+	disk := VirtualServerDisks{
+		VirtualServerStorageVolume{
+			Name: name,
+			Spec: kvv1.VolumeSource{
+				PersistentVolumeClaim: &kvv1.PersistentVolumeClaimVolumeSource{
+					PersistentVolumeClaimVolumeSource: pvcSource,
+				},
 			},
+		},
+		DiskAttributes{
+			ReadOnly: readOnly,
 		},
 	}
 
@@ -442,6 +447,23 @@ func (vs *VirtualServer) AddPVCDisk(name string, pvcName string, readOnly bool) 
 	vs.Spec.Storage.AdditionalDisks = append(vs.Spec.Storage.AdditionalDisks, disk)
 }
 
+// SetDiskSerial sets the disk serial number.
+// It sets serial for root disk when name is "root" or for other additional disk name
+// when disk does not exist it returns false
+func (vs *VirtualServer) SetDiskSerial(name, serial string) bool {
+	if name == "root" {
+		vs.Spec.Storage.Root.Serial = serial
+		return true
+	}
+	for i, _ := range vs.Spec.Storage.AdditionalDisks {
+		if vs.Spec.Storage.AdditionalDisks[i].Name == name {
+			vs.Spec.Storage.AdditionalDisks[i].Serial = serial
+			return true
+		}
+	}
+	return false
+}
+
 // Add an ephemeral EmptyDisk as a disk to the VirtualServer
 func (vs *VirtualServer) AddEmptyDisk(name string, size string) error {
 	sz, err := resource.ParseQuantity(size)
@@ -451,11 +473,14 @@ func (vs *VirtualServer) AddEmptyDisk(name string, size string) error {
 	emptyDisk := kvv1.EmptyDiskSource{
 		Capacity: sz,
 	}
-	disk := VirtualServerStorageVolume{
-		Name: name,
-		Spec: kvv1.VolumeSource{
-			EmptyDisk: &emptyDisk,
+	disk := VirtualServerDisks{
+		VirtualServerStorageVolume{
+			Name: name,
+			Spec: kvv1.VolumeSource{
+				EmptyDisk: &emptyDisk,
+			},
 		},
+		DiskAttributes{},
 	}
 
 	for _, d := range vs.Spec.Storage.AdditionalDisks {

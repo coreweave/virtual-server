@@ -175,7 +175,7 @@ type VirtualServerStorage struct {
 	// Root describes the root filesystem of the VirtualServer
 	Root VirtualServerStorageRoot `json:"root"`
 	// AdditionalDisks is an array of disks devices added to the VirtualServer
-	AdditionalDisks []VirtualServerStorageVolume `json:"additionalDisks,omitempty"`
+	AdditionalDisks []VirtualServerDisks `json:"additionalDisks,omitempty"`
 	// Filesystems is an array of filesystem mounted to the VirtualServer
 	FileSystems []VirtualServerFilesystem `json:"filesystems,omitempty"`
 	// Swap describes a swap volume of the specified size added to the VirtualServer
@@ -206,12 +206,30 @@ type VirtualServerStorageRoot struct {
 	// A local image will be used to write changes, and will be discared when the Virtual Server is stopped or restarted.
 	// Only a PVC source may be specified
 	Ephemeral bool `json:"ephemeral,omitempty"`
+	// Disk serial number
+	// +optional
+	Serial string `json:"serial,omitempty"`
 }
 
 // VirtualServerStorageVolume describes a named volume in the VirtualServer
 type VirtualServerStorageVolume struct {
 	Name string            `json:"name"`
 	Spec kvv1.VolumeSource `json:"spec"`
+}
+
+// DiskAttributes describes disk sttributes
+type DiskAttributes struct {
+	// ReadOnly
+	// +optional
+	ReadOnly bool `json:"readOnly,omitempty"`
+	// Disk serial number
+	// +optional
+	Serial string `json:"serial,omitempty"`
+}
+
+type VirtualServerDisks struct {
+	VirtualServerStorageVolume `json:",inline"`
+	DiskAttributes             `json:",inline"`
 }
 
 type VirtualServerFilesystem struct {
